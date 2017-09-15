@@ -1,6 +1,10 @@
-const express = require('express');
+// install plugins
+const Express = require('express');
+const Rollbar = require('rollbar');
 
-let app = express();
+// initialize plugins
+const app = Express();
+const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
 // set up handlebars view engine
 let handlebars = require('express-handlebars')
@@ -10,8 +14,7 @@ app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(express.static(__dirname + '/public'));
-
+app.use(Express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
 	res.render('home');
@@ -21,6 +24,10 @@ app.get('/', function(req, res) {
 app.use(function(req, res, next){
 	res.status(404);
 	res.render('404');
+	rollbar.log(
+		'full url requested: ' + 
+		req.protocol + '://' + req.get('host') + req.originalUrl
+	);
 });
 
 // 500 error handler (middleware)
@@ -28,6 +35,7 @@ app.use(function(err, req, res, next){
 	console.error(err.stack);
 	res.status(500);
 	res.render('500');
+	rollbar.log('err.stack: ' + err.stack);
 });
 
 app.listen(app.get('port'), function(){
