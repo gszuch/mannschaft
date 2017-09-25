@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mannschaft - File Branching</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/9f419babb4.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row header-row">
+			<div class="col-md-3 logo"><h2>Mannschaft</h2></div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4 search">
+				<div class="input-group">
+			      <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+			      <span class="input-group-btn">
+			        <button class="btn btn-secondary" type="button">Go!</button>
+			      </span>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="container">
+		<div class="row title-row">
+			<div class="col-md-8"><a href="file-manager.html">
+				&lt;- File Manager</a><h3>HelloWorld.txt</h3>
+				<small class="text-muted">A file with basic text</small>
+			</div>
+			<div class="col-md-4 right-file-details">
+				<a class="btn btn-primary btn-block" href="#" title="Download Original">Download Original (7kb)</a>
+				<div class="upload-info"><small class="muted-text">* Uploaded on 9/9/17 @ 10:10 AM</small></div>
+			</div>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="container">
+		<table class="table revision-table table-hover">
+			<thead>
+				<tr>
+					<th class="changes-made">Changes</th>
+					<th class="last-modified">Modified Date</th>
+					<th>Branch/Download</th>
+				</tr>
+		 	</thead>
+		 	<tbody>
+		 		<tr>
+		 			<td class="changes-made"><a href="#">HelloWorld.txt</a> <span class="badge badge-default">Original</span></td>
+		 			<td class="last-modified">9/9/17 @ 10:10 AM</td></td>
+		 			<td><i class="fa fa-code-fork" aria-hidden="true"></i> / <i class="fa fa-download" aria-hidden="true"></i></td>
+		 		</tr>
+		 		<tr>
+		 			<td class="changes-made"><a href="#">Added a space between Hello and World</a></td>
+		 			<td class="last-modified">9/13/17 @ 12:00 PM</td></td>
+		 			<td><i class="fa fa-code-fork" aria-hidden="true"></i> / <i class="fa fa-download" aria-hidden="true"></i></td>
+		 		</tr>
+		 		<tr>
+		 			<td class="changes-made"><a href="#">Capitalized "world"</a></td>
+		 			<td class="last-modified">9/16/17 @ 10:30 AM</td></td>
+		 			<td><i class="fa fa-code-fork" aria-hidden="true"></i> / <i class="fa fa-download" aria-hidden="true"></i></td>
+		 		</tr>
+		 		<tr>
+		 			<td class="changes-made"><a href="#">Added a period to the end of file</a></td>
+		 			<td class="last-modified">9/20/17 @ 2:30 PM</td></td>
+		 			<td><i class="fa fa-code-fork" aria-hidden="true"></i> / <i class="fa fa-download" aria-hidden="true"></i></td>
+		 		</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<hr>
+
+	<p class="footer">Copyright &copy; 2017 Mannschaft</p>
+</body>
+</html>
