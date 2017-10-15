@@ -2,6 +2,7 @@
 const Express = require('express');
 const Rollbar = require('rollbar');
 const bodyParser = require("body-parser");
+var session = require("client-sessions");
 
 // initialize plugins
 const app = Express();
@@ -21,121 +22,171 @@ app.set('port', process.env.PORT || 3000);
 app.use(Express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+	cookieName: 'session',
+	secret: 'ce6NDZCA5Id87XupozbxH6Y3FtkO4a8u',
+	duration: 60 * 60 * 1000,
+	activeDuration: 10 * 60 * 1000
+}));
 
 // primary views and relevant routes / aliases
 app.get(['/','/login'], function(req,res){
 	//if(req.path!=='/login')
 	//	res.redirect(302,'/login');
 
-	let showError = false;
-	if(req.query.q==='showError')
-		showError = true;
-
-	res.render('login',{
-		containerName: 'login',
-		status: 'Not submitted',
-		showError: showError
-	});
+	if (typeof req.session.user !== 'undefined') {
+		//console.log("Session exists");
+		res.redirect('/file-manager');
+	}
+	else {
+		console.log("Session does not exist");
+		
+		let showError = false;
+		if(req.query.q==='showError')
+			showError = true;
+	
+	
+		res.render('login',{
+			containerName: 'login',
+			showError: showError
+		});
+	}
+		
 });
 
 app.post(['/','/login'], function(req, res) {
 
 	let showError = false;
-	let status = "Submitted";
 
 	// Set main user information
 	let username = "mannschaft";
 	let password = "eins";
 	let author = "John Doe";
-
+	
 	if (req.body.username == username && req.body.password == password) {
-		status = "Correct User";
+
+		// Setup user object to store in session
+		var user = { name: username, author: author };
+		req.session.user = user;
+
+		res.redirect('/file-manager');
 	}
 	else {
-		status = "Incorrect User";
+
+		res.render('login', {
+			containerName: 'login',
+			showError: showError
+		})
 	}
 
-	res.render('login', {
-		containerName: 'login',
-		status: status,
-		showError: showError
-	})
 });
 
 app.get('/file-manager', function(req,res){
-	res.render('file-manager',{
-		title: 'File Manager',
-		hasHeader: true,
-		hasHeaderUpload: true,
-		footerBorder: true
-	});
+	// If session established
+	if (typeof req.session.user !== 'undefined') {
+		res.render('file-manager',{
+			title: 'File Manager',
+			hasHeader: true,
+			hasHeaderUpload: true,
+			footerBorder: true
+		});
+	}
+	else {
+		res.redirect('/');
+	}
 });
 
 app.get('/upload', function(req,res){
-	res.render('upload',{
-		title: 'Upload File',
-		containerName: 'upload-form',
-		hasHeader: true,
-		hasHeaderUpload: false,
-		
-		// breadcrumbs should be converted to something
-		// more modular, perhaps a module?
-		hasHeaderBreadcrumbs: true,
-		breadcrumbsPath: '/file-manager',
-		breadcrumbsText: 'File Manager',
+	if (typeof req.session.user !== 'undefined') {
+		res.render('upload',{
+			title: 'Upload File',
+			containerName: 'upload-form',
+			hasHeader: true,
+			hasHeaderUpload: false,
+			
+			// breadcrumbs should be converted to something
+			// more modular, perhaps a module?
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/file-manager',
+			breadcrumbsText: 'File Manager',
 
-		hasTitleRowBorder: true,
-		footerBorder: true
-	})
+			hasTitleRowBorder: true,
+			footerBorder: true
+		});
+	}
+	else {
+		res.redirect('/');
+	}
 });
 
 app.get('/document', function(req,res){
-	res.render('document',{
-		// replace w/ dynamic document name from querystring
-		title: 'HelloWorld.txt',
-		// replace w/ dynamic document description
-		subtitle: 'A file with basic text',
-		hasHeader: true,
-		
-		hasHeaderBreadcrumbs: true,
-		breadcrumbsPath: '/file-manager',
-		breadcrumbsText: 'File Manager',
+	if (typeof req.session.user !== 'undefined') {
+		res.render('document',{
+			// replace w/ dynamic document name from querystring
+			title: 'HelloWorld.txt',
+			// replace w/ dynamic document description
+			subtitle: 'A file with basic text',
+			hasHeader: true,
+			
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/file-manager',
+			breadcrumbsText: 'File Manager',
 
-		hasHeaderDownload: true,
-		fileSize: '7kb',
-		uploadDate: '9/9/17',
-		uploadTime: '10:10 AM',
+			hasHeaderDownload: true,
+			fileSize: '7kb',
+			uploadDate: '9/9/17',
+			uploadTime: '10:10 AM',
 
-		footerBorder: true
-	})
+			footerBorder: true
+		});
+	}
+	else {
+		res.redirect('/');
+	}
 });
 
 app.get('/branch-type', function(req,res){
-	res.render('branch-type',{
-		title: 'Branch File',
-		hasHeader: true,
-		
-		hasHeaderBreadcrumbs: true,
-		breadcrumbsPath: '/file-manager',
-		breadcrumbsText: 'File Manager',
+	if (typeof req.session.user !== 'undefined') {
+		res.render('branch-type',{
+			title: 'Branch File',
+			hasHeader: true,
+			
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/file-manager',
+			breadcrumbsText: 'File Manager',
 
-		footerBorder: true
-	})
+			footerBorder: true
+		});
+	}
+	else {
+		res.redirect('/');
+	}
 });
 
 app.get('/edit', function(req,res){
-	res.render('edit',{
-		title: 'Edit File',
-		containerName: 'upload-form',
-		hasHeader: true,
+	if (typeof req.session.user !== 'undefined') {
+		res.render('edit',{
+			title: 'Edit File',
+			containerName: 'upload-form',
+			hasHeader: true,
 
-		hasHeaderBreadcrumbs: true,
-		breadcrumbsPath: '/file-manager',
-		breadcrumbsText: 'File Manager',
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/file-manager',
+			breadcrumbsText: 'File Manager',
 
-		hasTitleRowBorder: true,
-		footerBorder: true
-	})
+			hasTitleRowBorder: true,
+			footerBorder: true
+		});
+	}
+	else {
+		res.redirect('/');
+	}
+});
+
+// Logout
+app.get('/logout', function(req, res) {
+	req.session.reset();
+	res.redirect('/');
 });
 
 // 404 catch-all handler (middleware)
