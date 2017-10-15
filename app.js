@@ -1,32 +1,41 @@
-// install plugins
+// node modules
 const Express = require('express');
 const Rollbar = require('rollbar');
-const bodyParser = require("body-parser");
-var session = require("client-sessions");
+const BodyParser = require("body-parser");
+const Session = require("client-sessions");
 
 // initialize plugins
 const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
+// define constants
+const cookieSessionMath = {
+	base: 60 * 1000,
+	duration: this.base * 60,
+	activeDuration: this.base * 10
+}
+
 // set up handlebars view engine
-let handlebars = require('express-handlebars')
+const Hbs = require('express-handlebars')
 	.create({ 
-		defaultLayout:'main',
-		partialsDir: 'views/partials/'
+		extname: '.hbs',
+		defaultLayout: 'main',
+		partialsDir: 'views/partials/',
+		layoutsDir: 'views/layouts/'
 	});
-app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
+app.engine('hbs', Hbs.engine);
+app.set('view engine', 'hbs');
 
 app.set('port', process.env.PORT || 3000);
 
 app.use(Express.static(__dirname + '/public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
+app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({ extended: true }));
+app.use(Session({
 	cookieName: 'session',
 	secret: 'ce6NDZCA5Id87XupozbxH6Y3FtkO4a8u',
-	duration: 60 * 60 * 1000,
-	activeDuration: 10 * 60 * 1000
+	duration: cookieSessionMath.duration,
+	activeDuration: cookieSessionMath.activeDuration
 }));
 
 // primary views and relevant routes / aliases
