@@ -75,7 +75,8 @@ app.post(['/','/login'], function(req, res) {
 
 		res.render('login', {
 			containerName: 'login',
-			showError: showError
+			showError: showError,
+			hasLogout: false
 		})
 	}
 
@@ -88,7 +89,8 @@ app.get('/file-manager', function(req,res){
 			title: 'File Manager',
 			hasHeader: true,
 			hasHeaderUpload: true,
-			footerBorder: true
+			footerBorder: true,
+			hasLogout: true
 		});
 	}
 	else {
@@ -111,7 +113,8 @@ app.get('/upload', function(req,res){
 			breadcrumbsText: 'File Manager',
 
 			hasTitleRowBorder: true,
-			footerBorder: true
+			footerBorder: true,
+			hasLogout: true
 		});
 	}
 	else {
@@ -137,7 +140,8 @@ app.get('/document', function(req,res){
 			uploadDate: '9/9/17',
 			uploadTime: '10:10 AM',
 
-			footerBorder: true
+			footerBorder: true,
+			hasLogout: true
 		});
 	}
 	else {
@@ -155,7 +159,8 @@ app.get('/branch-type', function(req,res){
 			breadcrumbsPath: '/file-manager',
 			breadcrumbsText: 'File Manager',
 
-			footerBorder: true
+			footerBorder: true,
+			hasLogout: true
 		});
 	}
 	else {
@@ -175,7 +180,8 @@ app.get('/edit', function(req,res){
 			breadcrumbsText: 'File Manager',
 
 			hasTitleRowBorder: true,
-			footerBorder: true
+			footerBorder: true,
+			hasLogout: true
 		});
 	}
 	else {
