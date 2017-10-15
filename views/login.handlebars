@@ -6,6 +6,9 @@
 </div>
 {{/if}}
 
+{{#if status}}
+<h1>{{{status}}}</h1>
+{{/if}}
 
 <div class="row header-row">
     <div class="col-lg-4 col-md-6 col-sm-12 logo col-center">
@@ -14,12 +17,14 @@
 </div>
 <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-12 col-center login">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Username">
-        </div>
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Password">
-        </div>
-        <a href="file-manager" class="btn btn-primary btn-block">Login</a>
+        <form action="/" method="POST">
+            <div class="input-group">
+                <input type="text" name="username" class="form-control" placeholder="Username">
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" class="form-control" placeholder="Password">
+            </div>
+            <input type="submit" class="btn btn-primary btn-block" value="Login">
+        </form>
     </div>
 </div>

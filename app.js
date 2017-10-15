@@ -1,10 +1,16 @@
 // install plugins
 const Express = require('express');
 const Rollbar = require('rollbar');
+const bodyParser = require("body-parser");
+const NodeSession = require("node-session");
 
 // initialize plugins
 const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
+
+// Configure session
+session = new NodeSession({secret: 'ce6NDZCA5Id87XupozbxH6Y3FtkO4a8u'});
+session.startSession(req, res, callback);
 
 // set up handlebars view engine
 let handlebars = require('express-handlebars')
@@ -18,11 +24,13 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 
 app.use(Express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // primary views and relevant routes / aliases
 app.get(['/','/login'], function(req,res){
-	if(req.path!=='/login')
-		res.redirect(302,'/login');
+	//if(req.path!=='/login')
+	//	res.redirect(302,'/login');
 
 	let showError = false;
 	if(req.query.q==='showError')
@@ -30,8 +38,33 @@ app.get(['/','/login'], function(req,res){
 
 	res.render('login',{
 		containerName: 'login',
+		status: 'Not submitted',
 		showError: showError
 	});
+});
+
+app.post(['/','/login'], function(req, res) {
+
+	let showError = false;
+	let status = "Submitted";
+
+	// Set main user information
+	let username = "mannschaft";
+	let password = "eins";
+	let author = "John Doe";
+
+	if (req.body.username == username && req.body.password == password) {
+		status = "Correct User";
+	}
+	else {
+		status = "Incorrect User";
+	}
+
+	res.render('login', {
+		containerName: 'login',
+		status: status,
+		showError: showError
+	})
 });
 
 app.get('/file-manager', function(req,res){

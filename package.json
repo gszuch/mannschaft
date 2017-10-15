@@ -9,8 +9,10 @@
   "author": "Your Name Here",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.15.4",
     "express-handlebars": "^3.0.0",
+    "node-session": "^1.2.1",
     "rollbar": "^2.2.7"
   }
 }
