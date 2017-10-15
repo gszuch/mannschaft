@@ -2,15 +2,10 @@
 const Express = require('express');
 const Rollbar = require('rollbar');
 const bodyParser = require("body-parser");
-const NodeSession = require("node-session");
 
 // initialize plugins
 const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
-
-// Configure session
-session = new NodeSession({secret: 'ce6NDZCA5Id87XupozbxH6Y3FtkO4a8u'});
-session.startSession(req, res, callback);
 
 // set up handlebars view engine
 let handlebars = require('express-handlebars')
