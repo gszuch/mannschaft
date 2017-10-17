@@ -1,7 +1,11 @@
 {{#if showError}}
 <div class="row">
     <div class="alert alert-danger col-lg-4 col-md-6 col-sm-12 col-center">
-        Error! Please try again.
+        {{#if errorDefinition}} 
+            {{ errorDefinition }}
+        {{else}}
+            Error! Please try again.
+        {{/if}}
     </div>
 </div>
 {{/if}}

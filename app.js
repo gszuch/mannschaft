@@ -40,20 +40,17 @@ app.use(Session({
 
 // primary views and relevant routes / aliases
 app.get(['/','/login'], function(req,res){
-	//if(req.path!=='/login')
-	//	res.redirect(302,'/login');
 
 	if (typeof req.session.user !== 'undefined') {
-		//console.log("Session exists");
+		// Session exists, redirect to file manager
 		res.redirect('/file-manager');
 	}
 	else {
-		console.log("Session does not exist");
+		// Session does not exist, show login
 		
 		let showError = false;
 		if(req.query.q==='showError')
 			showError = true;
-	
 	
 		res.render('login',{
 			containerName: 'login',
@@ -66,6 +63,7 @@ app.get(['/','/login'], function(req,res){
 app.post(['/','/login'], function(req, res) {
 
 	let showError = false;
+	let errorDefinition = false;
 
 	// Set main user information
 	let username = "mannschaft";
@@ -82,9 +80,33 @@ app.post(['/','/login'], function(req, res) {
 	}
 	else {
 
+		showError = true;
+
+		if (req.body.username == "" && req.body.password == "") {
+			// Both fields are empty
+			errorDefinition = "Error! Please fill out both fields.";
+		}
+		else if (req.body.username == "") {
+			//Empty username
+			errorDefinition = "Error! Please enter a username.";
+		}
+		else if (req.body.password == "") {
+			// Empty password 
+			errorDefinition = "Error! Please enter a password.";
+		}
+		else if (req.body.username != username || req.body.password != password) {
+			// Login Credentials are wrong
+			errorDefinition = "Error! Wrong login information.";
+		}
+		else {
+			// Unknown error
+			errorDefinition = "Error! Try again.";
+		}
+
 		res.render('login', {
 			containerName: 'login',
 			showError: showError,
+			errorDefinition: errorDefinition,
 			hasLogout: false
 		})
 	}
