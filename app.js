@@ -308,10 +308,6 @@ app.get('/logout', function(req, res) {
 app.use(function(req, res, next){
 	res.status(404);
 	res.render('404');
-	rollbar.log(
-		'full url requested: ' + 
-		req.protocol + '://' + req.get('host') + req.originalUrl
-	);
 });
 
 // 500 error handler (middleware)
