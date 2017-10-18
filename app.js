@@ -56,6 +56,8 @@ app.use(Session({
 // primary views and relevant routes / aliases
 app.get(['/','/login'], function(req,res){
 
+	rollbar.reportMessage("Visited homepage");
+
 	if (typeof req.session.user !== 'undefined') {
 		// Session exists, redirect to file manager
 		res.redirect('/file-manager');
