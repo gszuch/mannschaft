@@ -3,10 +3,25 @@ const Express = require('express');
 const Rollbar = require('rollbar');
 const BodyParser = require("body-parser");
 const Session = require("client-sessions");
+const SolrNode = require("solr-node");
+const fs = require("fs");
+const Multer = require("multer");
+const FileUpload = require("express-handlebars");
 
 // initialize plugins
 const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
+
+// Connecting to Solr
+const client = new SolrNode ({
+	host: '127.0.0.1',
+	port: '8983',
+	core: 'mannschaft',
+	protocol: 'http'
+});
+
+// Direct file uploads
+const upload = Multer({ dest: 'uploads/'});
 
 // define constants
 const cookieSessionMath = {
@@ -87,7 +102,7 @@ app.post(['/','/login'], function(req, res) {
 			errorDefinition = "Error! Please fill out both fields.";
 		}
 		else if (req.body.username == "") {
-			//Empty username
+			// Empty username
 			errorDefinition = "Error! Please enter a username.";
 		}
 		else if (req.body.password == "") {
@@ -116,13 +131,28 @@ app.post(['/','/login'], function(req, res) {
 app.get('/file-manager', function(req,res){
 	// If session established
 	if (typeof req.session.user !== 'undefined') {
-		res.render('file-manager',{
-			title: 'File Manager',
-			hasHeader: true,
-			hasHeaderUpload: true,
-			footerBorder: true,
-			hasLogout: true
+
+		// Pull from solr
+		console.log("Retrieving records from Solr...");
+
+		var searchTerm = client.query().q('*:*');
+		client.search(searchTerm, function (err, results) {
+			if (err) {
+				console.log(err);
+				return;
+			}
+			console.log('Response: ', results.response);
+			
+			res.render('file-manager',{
+				title: 'File Manager',
+				hasHeader: true,
+				hasHeaderUpload: true,
+				footerBorder: true,
+				hasLogout: true,
+				docs: results.response.docs
+			});
 		});
+
 	}
 	else {
 		res.redirect('/');
@@ -131,6 +161,7 @@ app.get('/file-manager', function(req,res){
 
 app.get('/upload', function(req,res){
 	if (typeof req.session.user !== 'undefined') {
+
 		res.render('upload',{
 			title: 'Upload File',
 			containerName: 'upload-form',
@@ -151,6 +182,51 @@ app.get('/upload', function(req,res){
 	else {
 		res.redirect('/');
 	}
+});
+
+app.post('/upload', upload.single("uploadedFile"), function(req, res) {
+	// Upload file form
+
+	console.log("User attempted to upload file...");
+	console.log(req.file.originalname);
+	
+	// Just for testing
+	var d = new Date();
+	var month = d.getMonth() + 1;
+	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+
+	fs.readFile(req.file.path, 'utf8', function(err, contents) {
+		var fileContents = contents;
+    	var fileActual = req.file.originalname;
+    	var fileName = req.body.name;
+    	var fileAuthor = req.body.author;
+    	var fileDescription = req.body.description;
+		var fileStatus;
+		
+		// Assemble object to add to Solr
+		var testObj = {
+			name : fileName,
+			actual : fileActual, 
+			author: fileAuthor,
+			description : fileDescription,
+			contents : fileContents,
+			date: testDate
+		};
+
+		// Update Solr
+		client.update(testObj, function(err, result) {
+			if (err) {
+				console.log(err);
+				console.log("Document could not be added!");
+			}
+			else {
+				console.log("Document added to Solr!");
+			}
+			console.log("Response: ", result.responseHeader);
+		});
+
+		res.redirect('/file-manager');
+	});
 });
 
 app.get('/document', function(req,res){
