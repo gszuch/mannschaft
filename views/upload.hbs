@@ -1,13 +1,13 @@
-<form>
+<form action="/upload" method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col">
             <div class="form-group">
                 <label for="file-upload">File:</label>
-                <input type="file" class="form-control-file">
+                <input type="file" name="uploadedFile" class="form-control-file">
             </div>
             <div class="form-group">
                 <label for="title">Title</label>
-                <input name="title" class="form-control" type="text" placeholder="Title">
+                <input name="name" class="form-control" type="text" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="author">Author</label>
@@ -15,13 +15,13 @@
             </div>
             <div class="form-group">
                 <label for="changes">Description/Changes</label>
-                <textarea name="changes" class="form-control" placeholder="Description/Changes" rows="3"></textarea>
+                <textarea name="description" class="form-control" placeholder="Description/Changes" rows="3"></textarea>
             </div>
         </div>
     </div>
     <div class="row justify-content-center upload-btn">
         <div class="col-md-3">
-            <a href="#" class="btn btn-primary btn-block">Upload File</a>
+            <input type="submit" class="btn btn-primary btn-block" value="Upload File">
         </div>
     </div>
 </form>
