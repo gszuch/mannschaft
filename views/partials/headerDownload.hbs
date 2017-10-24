@@ -1,0 +1,13 @@
+<div class="col-md-4 right-file-details">
+    <a class="btn btn-primary btn-block" 
+        href="#" 
+        title="Download Original">
+        Download Original
+        {{#if fileSize}} ({{fileSize}}){{/if}}
+    </a>
+{{#if uploadDate}}
+    <div class="upload-info">
+        <small class="muted-text">* Uploaded on {{uploadDate}} @ {{uploadTime}}</small>
+    </div>
+{{/if}}
+</div>
