@@ -218,7 +218,7 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 		};
 
 		// Update Solr
-		/*
+		
 		client.update(testObj, function(err, result) {
 			if (err) {
 				console.log(err);
@@ -229,7 +229,7 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 			}
 			console.log("Response: ", result.responseHeader);
 		});
-		*/
+		
 		res.redirect('/file-manager');
 	});
 });
