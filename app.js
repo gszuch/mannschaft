@@ -18,7 +18,7 @@ const client = new SolrNode ({
 	host: '52.171.129.65',
 	port: '8983',
 	core: 'testCore',
-	protocol: 'https'
+	protocol: 'http'
 });
 
 
