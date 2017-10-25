@@ -137,7 +137,7 @@ app.get('/file-manager', function(req,res){
 	if (typeof req.session.user !== 'undefined') {
 
 		// Pull from solr
-		console.log("Retrieving records from Solr...");
+		//console.log("Retrieving records from Solr...");
 
 		/*
 		var searchTerm = client.query().q('*:*');
@@ -158,6 +158,16 @@ app.get('/file-manager', function(req,res){
 			});
 		});
 		*/
+
+		res.render('file-manager',{
+			title: 'File Manager',
+			hasHeader: true,
+			hasHeaderUpload: true,
+			footerBorder: true,
+			hasLogout: true,
+			docs: results.response.docs
+		});
+		
 	}
 	else {
 		res.redirect('/');
