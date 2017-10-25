@@ -13,12 +13,14 @@ const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
 // Connecting to Solr
+/*
 const client = new SolrNode ({
 	host: '52.171.129.65',
 	port: '8983',
 	core: 'testCore',
 	protocol: 'http'
 });
+*/
 
 // Direct file uploads
 const upload = Multer({ dest: 'uploads/'});
@@ -137,6 +139,7 @@ app.get('/file-manager', function(req,res){
 		// Pull from solr
 		console.log("Retrieving records from Solr...");
 
+		/*
 		var searchTerm = client.query().q('*:*');
 		client.search(searchTerm, function (err, results) {
 			if (err) {
@@ -154,7 +157,7 @@ app.get('/file-manager', function(req,res){
 				docs: results.response.docs
 			});
 		});
-
+		*/
 	}
 	else {
 		res.redirect('/');
@@ -216,6 +219,7 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 		};
 
 		// Update Solr
+		/*
 		client.update(testObj, function(err, result) {
 			if (err) {
 				console.log(err);
@@ -226,7 +230,7 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 			}
 			console.log("Response: ", result.responseHeader);
 		});
-
+		*/
 		res.redirect('/file-manager');
 	});
 });
