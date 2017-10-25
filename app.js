@@ -14,14 +14,13 @@ const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
 // Connecting to Solr
 
-/*
 const client = new SolrNode ({
 	host: '10.0.1.4',
 	port: '8983',
 	core: 'testCore',
 	protocol: 'http'
 });
-*/
+
 
 // Direct file uploads
 const upload = Multer({ dest: 'uploads/'});
