@@ -15,9 +15,14 @@
     "express-fileupload": "^0.3.0",
     "express-handlebars": "^3.0.0",
     "fs": "0.0.1-security",
+    "log4js": "^2.3.10",
     "multer": "^1.3.0",
     "node-session": "^1.2.1",
+    "query": "^0.2.0",
+    "querystring": "^0.2.0",
     "random-id": "0.0.2",
-    "rollbar": "^2.2.7"
+    "request": "^2.83.0",
+    "rollbar": "^2.2.7",
+    "underscore": "^1.8.3"
   }
 }
