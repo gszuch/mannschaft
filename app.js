@@ -146,7 +146,7 @@ app.get('/file-manager', function(req,res){
 				console.log(err);
 				return;
 			}
-			console.log('Response: ', results.response);
+			//console.log('Response: ', results.response);
 			
 			res.render('file-manager',{
 				title: 'File Manager',
@@ -264,6 +264,79 @@ app.get('/document', function(req,res){
 	else {
 		res.redirect('/');
 	}
+});
+
+app.get('/create', function(req, res) {
+			if (typeof req.session.user !== 'undefined') {
+		
+				res.render('create-text-file',{
+					title: 'Create File',
+					containerName: 'create-form',
+					hasHeader: true,
+					hasHeaderUpload: false,
+					
+					// breadcrumbs should be converted to something
+					// more modular, perhaps a module?
+					hasHeaderBreadcrumbs: true,
+					breadcrumbsPath: '/create',
+					breadcrumbsText: 'Create File',
+		
+					hasTitleRowBorder: true,
+					footerBorder: true,
+					hasLogout: true
+				});
+			}
+			else {
+				res.redirect('/');
+			}
+});
+
+app.post('/create', function(req, res) {
+	
+	console.log("User tried to create file...");
+	console.log(req.body);
+
+	// Just for testing
+	var d = new Date();
+	var month = d.getMonth() + 1;
+	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+	var id = RandomID(10, "0");
+
+	// Get form info
+	var fileContents = req.body.contents;
+	var fileActual = req.body.name;
+	var fileName = req.body.name;
+	var fileAuthor = req.body.author;
+	var fileDescription = req.body.description;
+	var fileStatus;
+	
+	// Assemble object to add to Solr
+	var testObj = {
+		id: id,
+		title : fileName,
+		actual : fileActual, 
+		author: fileAuthor,
+		description : fileDescription,
+		contents : fileContents,
+		date: testDate
+	};
+
+	console.log(testObj);
+
+	// Update Solr
+	client.update(testObj, function(err, result) {
+		if (err) {
+			console.log(err);
+			console.log("Document could not be added!");
+		}
+		else {
+			console.log("Document added to Solr!");
+		}
+		console.log("Response: ", result.responseHeader);
+	});
+	
+	res.redirect('/file-manager');
+
 });
 
 app.get('/branch-type', function(req,res){
