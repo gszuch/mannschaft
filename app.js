@@ -3,10 +3,11 @@ const Express = require('express');
 const Rollbar = require('rollbar');
 const BodyParser = require("body-parser");
 const Session = require("client-sessions");
-const SolrNode = require("solr-node");
+const SolrNode = require("./lib/solr-node");
 const fs = require("fs");
 const Multer = require("multer");
 const FileUpload = require("express-handlebars");
+const RandomID = require("random-id");
 
 // initialize plugins
 const app = Express();
@@ -14,11 +15,11 @@ const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
 // Connecting to Solr
 
-const client = new SolrNode ({
-	host: '52.171.129.65',
-	port: '8983',
-	core: 'testCore',
-	protocol: 'http'
+var client = new SolrNode({
+    host: 'us-east-1.websolr.com',
+    protocol: 'http',
+    core: '0641589cad32',
+    path: 'solr/'
 });
 
 
@@ -198,6 +199,7 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 	var d = new Date();
 	var month = d.getMonth() + 1;
 	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+	var id = RandomID(10, "0");
 
 	fs.readFile(req.file.path, 'utf8', function(err, contents) {
 		var fileContents = contents;
@@ -209,13 +211,16 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 		
 		// Assemble object to add to Solr
 		var testObj = {
-			name : fileName,
+			id: id,
+			title : fileName,
 			actual : fileActual, 
 			author: fileAuthor,
 			description : fileDescription,
 			contents : fileContents,
 			date: testDate
 		};
+
+		console.log(testObj);
 
 		// Update Solr
 		
