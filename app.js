@@ -57,326 +57,57 @@ app.use(Session({
 }));
 
 // primary views and relevant routes / aliases
+var login = require('./includes/login.js');
 app.get(['/','/login'], function(req,res){
-
-	rollbar.reportMessage("Visited homepage");
-
-	if (typeof req.session.user !== 'undefined') {
-		// Session exists, redirect to file manager
-		res.redirect('/file-manager');
-	}
-	else {
-		// Session does not exist, show login
-		
-		let showError = false;
-		if(req.query.q==='showError')
-			showError = true;
-	
-		res.render('login',{
-			containerName: 'login',
-			showError: showError
-		});
-	}
-		
+	login.loginGet(req,res);
 });
 
 app.post(['/','/login'], function(req, res) {
-
-	let showError = false;
-	let errorDefinition = false;
-
-	// Set main user information
-	let username = "mannschaft";
-	let password = "eins";
-	let author = "John Doe";
-	
-	if (req.body.username == username && req.body.password == password) {
-
-		// Setup user object to store in session
-		var user = { name: username, author: author };
-		req.session.user = user;
-
-		res.redirect('/file-manager');
-	}
-	else {
-
-		showError = true;
-
-		if (req.body.username == "" && req.body.password == "") {
-			// Both fields are empty
-			errorDefinition = "Error! Please fill out both fields.";
-		}
-		else if (req.body.username == "") {
-			// Empty username
-			errorDefinition = "Error! Please enter a username.";
-		}
-		else if (req.body.password == "") {
-			// Empty password 
-			errorDefinition = "Error! Please enter a password.";
-		}
-		else if (req.body.username != username || req.body.password != password) {
-			// Login Credentials are wrong
-			errorDefinition = "Error! Wrong login information.";
-		}
-		else {
-			// Unknown error
-			errorDefinition = "Error! Try again.";
-		}
-
-		res.render('login', {
-			containerName: 'login',
-			showError: showError,
-			errorDefinition: errorDefinition,
-			hasLogout: false
-		})
-	}
-
+	login.loginPost(req,res);
 });
 
+// File Manager 
+var fileManager = require('./includes/fileManager.js');
 app.get('/file-manager', function(req,res){
-	// If session established
-	if (typeof req.session.user !== 'undefined') {
-
-		// Pull from solr
-		console.log("Retrieving records from Solr...");
-
-		var searchTerm = client.query().q('*:*');
-		client.search(searchTerm, function (err, results) {
-			if (err) {
-				console.log(err);
-				return;
-			}
-			//console.log('Response: ', results.response);
-			
-			res.render('file-manager',{
-				title: 'File Manager',
-				hasHeader: true,
-				hasHeaderUpload: true,
-				footerBorder: true,
-				hasLogout: true,
-				docs: results.response.docs
-			});
-		});
-		
-	}
-	else {
-		res.redirect('/');
-	}
+	fileManager.fileManagerGet(client, req, res);
 });
 
+// Upload
+var uploadLogic = require('./includes/upload.js');
 app.get('/upload', function(req,res){
-	if (typeof req.session.user !== 'undefined') {
-
-		res.render('upload',{
-			title: 'Upload File',
-			containerName: 'upload-form',
-			hasHeader: true,
-			hasHeaderUpload: false,
-			
-			// breadcrumbs should be converted to something
-			// more modular, perhaps a module?
-			hasHeaderBreadcrumbs: true,
-			breadcrumbsPath: '/file-manager',
-			breadcrumbsText: 'File Manager',
-
-			hasTitleRowBorder: true,
-			footerBorder: true,
-			hasLogout: true
-		});
-	}
-	else {
-		res.redirect('/');
-	}
+	uploadLogic.uploadGet(req, res);
 });
 
 app.post('/upload', upload.single("uploadedFile"), function(req, res) {
-	// Upload file form
-
-	console.log("User attempted to upload file...");
-	console.log(req.file.originalname);
-	
-	// Just for testing
-	var d = new Date();
-	var month = d.getMonth() + 1;
-	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-	var id = RandomID(10, "0");
-
-	fs.readFile(req.file.path, 'utf8', function(err, contents) {
-		var fileContents = contents;
-    	var fileActual = req.file.originalname;
-    	var fileName = req.body.name;
-    	var fileAuthor = req.body.author;
-    	var fileDescription = req.body.description;
-		var fileStatus;
-		
-		// Assemble object to add to Solr
-		var testObj = {
-			id: id,
-			title : fileName,
-			actual : fileActual, 
-			author: fileAuthor,
-			description : fileDescription,
-			contents : fileContents,
-			date: testDate
-		};
-
-		console.log(testObj);
-
-		// Update Solr
-		
-		client.update(testObj, function(err, result) {
-			if (err) {
-				console.log(err);
-				console.log("Document could not be added!");
-			}
-			else {
-				console.log("Document added to Solr!");
-			}
-			console.log("Response: ", result.responseHeader);
-		});
-		
-		res.redirect('/file-manager');
-	});
+	uploadLogic.uploadPost(RandomID, client, fs, req, res);
 });
 
+// Document
+var documentLogic = require('./includes/document.js');
 app.get('/document', function(req,res){
-	if (typeof req.session.user !== 'undefined') {
-		res.render('document',{
-			// replace w/ dynamic document name from querystring
-			title: 'HelloWorld.txt',
-			// replace w/ dynamic document description
-			subtitle: 'A file with basic text',
-			hasHeader: true,
-			
-			hasHeaderBreadcrumbs: true,
-			breadcrumbsPath: '/file-manager',
-			breadcrumbsText: 'File Manager',
-
-			hasHeaderDownload: true,
-			fileSize: '7kb',
-			uploadDate: '9/9/17',
-			uploadTime: '10:10 AM',
-
-			footerBorder: true,
-			hasLogout: true
-		});
-	}
-	else {
-		res.redirect('/');
-	}
+	documentLogic.documentGet(req, res);
 });
 
+// Create Text File for Solr Entry
+var createLogic = require('./includes/create.js');
 app.get('/create', function(req, res) {
-			if (typeof req.session.user !== 'undefined') {
-		
-				res.render('create-text-file',{
-					title: 'Create File',
-					containerName: 'create-form',
-					hasHeader: true,
-					hasHeaderUpload: false,
-					
-					// breadcrumbs should be converted to something
-					// more modular, perhaps a module?
-					hasHeaderBreadcrumbs: true,
-					breadcrumbsPath: '/create',
-					breadcrumbsText: 'Create File',
-		
-					hasTitleRowBorder: true,
-					footerBorder: true,
-					hasLogout: true
-				});
-			}
-			else {
-				res.redirect('/');
-			}
+	createLogic.createGet(req, res);			
 });
 
 app.post('/create', function(req, res) {
-	
-	console.log("User tried to create file...");
-	console.log(req.body);
-
-	// Just for testing
-	var d = new Date();
-	var month = d.getMonth() + 1;
-	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-	var id = RandomID(10, "0");
-
-	// Get form info
-	var fileContents = req.body.contents;
-	var fileActual = req.body.name;
-	var fileName = req.body.name;
-	var fileAuthor = req.body.author;
-	var fileDescription = req.body.description;
-	var fileStatus;
-	
-	// Assemble object to add to Solr
-	var testObj = {
-		id: id,
-		title : fileName,
-		actual : fileActual, 
-		author: fileAuthor,
-		description : fileDescription,
-		contents : fileContents,
-		date: testDate
-	};
-
-	console.log(testObj);
-
-	// Update Solr
-	client.update(testObj, function(err, result) {
-		if (err) {
-			console.log(err);
-			console.log("Document could not be added!");
-		}
-		else {
-			console.log("Document added to Solr!");
-		}
-		console.log("Response: ", result.responseHeader);
-	});
-	
-	res.redirect('/file-manager');
-
+	createLogic.createPost(req, res);
 });
 
+// Branch Type
+var branchLogic = require('./includes/branch.js');
 app.get('/branch-type', function(req,res){
-	if (typeof req.session.user !== 'undefined') {
-		res.render('branch-type',{
-			title: 'Branch File',
-			hasHeader: true,
-			
-			hasHeaderBreadcrumbs: true,
-			breadcrumbsPath: '/file-manager',
-			breadcrumbsText: 'File Manager',
-
-			footerBorder: true,
-			hasLogout: true
-		});
-	}
-	else {
-		res.redirect('/');
-	}
+	branchLogic.branchGet(req, res);
 });
 
+// Edit
+var editLogic = require('./includes/edit.js');
 app.get('/edit', function(req,res){
-	if (typeof req.session.user !== 'undefined') {
-		res.render('edit',{
-			title: 'Edit File',
-			containerName: 'upload-form',
-			hasHeader: true,
-
-			hasHeaderBreadcrumbs: true,
-			breadcrumbsPath: '/file-manager',
-			breadcrumbsText: 'File Manager',
-
-			hasTitleRowBorder: true,
-			footerBorder: true,
-			hasLogout: true
-		});
-	}
-	else {
-		res.redirect('/');
-	}
+	editLogic.editGet(req, res);
 });
 
 // Logout
