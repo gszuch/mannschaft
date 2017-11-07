@@ -2,7 +2,9 @@
 
 <form action="/solr" method="POST">
     <fieldset>
-        <legend><h2>add a document to the index</h2></legend>
+        <legend>
+            <h2>add a document to the index</h2>
+        </legend>
         <label for="title">
             <span>title</span>
             <input type="text" name="title" required>
@@ -15,6 +17,22 @@
             contents
             <textarea name="contents" cols="30" rows="10" required></textarea>
         </label>
-        <p class="form-control"><button type="submit">add a document to the index</button></p>
+        <p class="form-control">
+            <button type="submit">add a document to the index</button>
+        </p>
     </fieldset>
 </form>
+
+{{#if docs}}
+<section>
+    <ul>
+        {{#each docs}}
+        <li>{{title}} ({{author}})</li>
+        <ul>
+            <li>{{description}}</li>
+            <li>{{contents}}</li>
+        </ul>
+        {{/each}}
+    </ul>
+</section>
+{{/if}}
