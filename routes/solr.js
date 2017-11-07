@@ -1,37 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const solr = require('solr-client');
+const SolrNode = require('solr-node');
 
-const client = solr.createClient();
+const client = new SolrNode ({
+	host: '127.0.0.1',
+	port: '8983',
+	core: 'mannschaft',
+	protocol: 'http'
+});
+client.autoCommit = true;
 
 /* GET solr client. */
-router.get('/solr', function (req, res, next) {
+router.get('/', function (req, res, next) {
     res.render('solr', {
         title: 'Solr Client'
     });
 });
 
 /* POST to solr client. */
-router.post('/solr', function (req, res, next) {
+router.post('/', function (req, res, next) {
     if (!req.body) return res.sendStatus(400)
 
-    const now = Date.now();// todo: consider changing to https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
-    const ymd = `${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDate()}`;
-    const hmss = `${now.getUTCHours()}${now.getUTCMinutes()}${now.getUTCSeconds()}${now.getUTCMilliseconds()}`;
-    const id = `${ymd}${hmss}`;
+    const now = Date.now();// todo: consider changing to https://developer.mozilla.org/en-US/docs/Web/API/Performance/now,
     const doc = {
-        id: id,
-        title_t: req.body.title,
-        description_t: req.body.description
-    };
+		id: now,
+		title : req.body.title,
+		author: "pst7@students.uwf.edu",
+		description : req.body.description,
+		contents : req.body.contents,
+		date: now
+	};
 
-    client.add(doc, function (err, obj) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(obj);
-        }
-    });
+    client.update(doc, function(err, result) {
+		if (err) {
+			console.log(err);
+		}
+		else {
+			console.log(doc);
+		}
+	});
 
     res.redirect(303, '/solr');
 });
