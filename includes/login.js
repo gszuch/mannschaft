@@ -1,8 +1,6 @@
 
 function loginGet(req, res) {
     
-    console.log("Test");
-
     if (typeof req.session.user !== 'undefined') {
         // Session exists, redirect to file manager
         res.redirect('/file-manager');

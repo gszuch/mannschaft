@@ -1,6 +1,7 @@
 // node modules
 const Express = require('express');
 const Rollbar = require('rollbar');
+const Path = require('path');
 const BodyParser = require("body-parser");
 const Session = require("client-sessions");
 const SolrNode = require("./lib/solr-node");
@@ -46,7 +47,8 @@ app.set('view engine', 'hbs');
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(Express.static(__dirname + '/public'));
+app.use(Express.static(Path.join(__dirname + '/public')));
+app.use('/document', Express.static(__dirname + '/public'));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
 app.use(Session({
@@ -69,6 +71,7 @@ app.post(['/','/login'], function(req, res) {
 // File Manager 
 var fileManager = require('./includes/fileManager.js');
 app.get('/file-manager', function(req,res){
+	console.log("FM Request: " + req.session.user.author);
 	fileManager.fileManagerGet(client, req, res);
 });
 
@@ -83,9 +86,10 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 });
 
 // Document
-var documentLogic = require('./includes/document.js');
-app.get('/document', function(req,res){
-	documentLogic.documentGet(req, res);
+var documentLogic = require("./includes/document.js");
+app.get("/document/:docID", function(req,res) {
+	console.log("D Request: " + req.session.user.author);
+	documentLogic.documentGet(client, req, res);
 });
 
 // Create Text File for Solr Entry
