@@ -1,8 +1,7 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+input:invalid {
+  border: 2px dashed red;
 }
 
-a {
-  color: #00B7FF;
+input:valid {
+  border: 2px solid black;
 }
