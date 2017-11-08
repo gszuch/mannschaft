@@ -66,9 +66,10 @@ function uploadPost(RandomID, client, fs, req, res) {
 				console.log("Document added to Solr!");
 			}
 			console.log("Response: ", result.responseHeader);
+				
+			res.redirect('/file-manager');
 		});
 		
-		res.redirect('/file-manager');
 	});
 }
 module.exports = {
