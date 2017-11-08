@@ -4,7 +4,7 @@ const Rollbar = require('rollbar');
 const Path = require('path');
 const BodyParser = require("body-parser");
 const Session = require("client-sessions");
-const SolrNode = require("./lib/solr-node");
+const SolrNode = require("solr-node");
 const fs = require("fs");
 const Multer = require("multer");
 const FileUpload = require("express-handlebars");
@@ -15,14 +15,12 @@ const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
 // Connecting to Solr
-
 var client = new SolrNode({
-    host: 'us-east-1.websolr.com',
+    host: '127.0.0.1',
     protocol: 'http',
-    core: '0641589cad32',
-    path: 'solr/'
+	core: 'testCore',
+	port: '8983'
 });
-
 
 // Direct file uploads
 const upload = Multer({ dest: 'uploads/'});
@@ -107,14 +105,15 @@ app.get('/file/:docID', function(req,res) {
 					return;
 			}
 
-			var file =  results.response.docs[0].contents;
 			var fileName = results.response.docs[0].title;
-			fileName = fileName.replace(/[#@!$^%*&()=~`'"{|}]/g, "");
+			var file =  results.response.docs[0].contents;
+			console.log("Download: " + file);
+			//fileName = fileName.replace(/[#@!$^%*&()=~`'"{|}]/g, "");
 			fileName += ".txt";
 			res.setHeader('Content-type', "application/octet-stream");
 			res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
 			res.send(file);
-
+			
 		});
 	}
 	else {

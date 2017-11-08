@@ -12,7 +12,12 @@ function fileManagerGet(client, req, res) {
                 console.log(err);
                 return;
             }
-            //console.log('Response: ', results.response);
+
+            // Check to see if any docs or empty
+            var resultDocs = "";
+            if (typeof results.response.docs !== 'undefined') {
+               resultDocs = results.response.docs;
+            }
 
             res.render('file-manager', {
                 title: 'File Manager',
@@ -20,7 +25,7 @@ function fileManagerGet(client, req, res) {
                 hasHeaderUpload: true,
                 footerBorder: true,
                 hasLogout: true,
-                docs: results.response.docs
+                docs: resultDocs
             });
         });
 

@@ -1,22 +1,21 @@
 function documentGet(client, req, res) {
 
-
     if (typeof req.session.user !== 'undefined') {
 
-		console.log("ID: " + req.params.docID);
 		var query = "id:" + req.params.docID;
 		var searchTerm = client.query().q(query);
         client.search(searchTerm, function (err, results) {
             if (err) {
                 console.log(err);
                 return;
-            }
-            console.log('Response: ', results.response);
+			}
+			
+            console.log('Title: ', results.response.docs[0].title);
 			
 			// Replace all instances of \n with <br/>
 			var formattedFileContent = results.response.docs[0].contents;
-			formattedFileContent = formattedFileContent.replace(/\n/g, "<br />");
-			
+			console.log("Contents: " + formattedFileContent);
+
             res.render('document',{
 				// replace w/ dynamic document name from querystring
 	
@@ -45,6 +44,7 @@ function documentGet(client, req, res) {
 	else {
 		res.redirect('/');
 	}
+	
 }
 
 module.exports = {
