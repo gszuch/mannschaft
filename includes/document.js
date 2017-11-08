@@ -13,6 +13,10 @@ function documentGet(client, req, res) {
             }
             console.log('Response: ', results.response);
 			
+			// Replace all instances of \n with <br/>
+			var formattedFileContent = results.response.docs[0].contents;
+			formattedFileContent = formattedFileContent.replace(/\n/g, "<br />");
+			
             res.render('document',{
 				// replace w/ dynamic document name from querystring
 	
@@ -26,8 +30,10 @@ function documentGet(client, req, res) {
 				breadcrumbsText: 'File Manager',
 	
 				hasHeaderDownload: true,
-				fileSize: '7kb',
+				fileID: results.response.docs[0].id,
 				uploadDate: results.response.docs[0].date,
+
+				contents: formattedFileContent,
 	
 				footerBorder: true,
 				hasLogout: true

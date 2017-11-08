@@ -11,10 +11,10 @@
         {{#each docs}}
         <tr>
             <td><i class="fa fa-file-text" aria-hidden="true"></i></td>
-            <td><a href="document/{{ id }}">{{ id }} {{ title }}</a></td>
+            <td><a href="document/{{ id }}">{{ title }}</a></td>
             <td class="last-modified">{{ date }}</td>
-            <td><a href="branch-type"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <i class="fa fa-download"
-                    aria-hidden="true"></i></td>
+            <td><a href="branch-type"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <a href="file/{{id}}"><i class="fa fa-download"
+                    aria-hidden="true"></i></a></td>
         </tr>
 
         {{/each}}

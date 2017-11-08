@@ -44,7 +44,7 @@ function uploadPost(RandomID, client, fs, req, res) {
 		
 		// Assemble object to add to Solr
 		var testObj = {
-			id: id,
+			id: id, 
 			title : fileName,
 			actual : fileActual, 
 			author: fileAuthor,

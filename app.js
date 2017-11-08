@@ -72,6 +72,7 @@ app.post(['/','/login'], function(req, res) {
 var fileManager = require('./includes/fileManager.js');
 app.get('/file-manager', function(req,res){
 	console.log("FM Request: " + req.session.user.author);
+	console.log("Date: " + Date.now());
 	fileManager.fileManagerGet(client, req, res);
 });
 
@@ -90,6 +91,37 @@ var documentLogic = require("./includes/document.js");
 app.get("/document/:docID", function(req,res) {
 	console.log("D Request: " + req.session.user.author);
 	documentLogic.documentGet(client, req, res);
+});
+
+
+// File Download
+app.get('/file/:docID', function(req,res) {
+	if (typeof req.session.user !== 'undefined') {
+		
+		console.log("ID: " + req.params.docID);
+		var query = "id:" + req.params.docID;
+		var searchTerm = client.query().q(query);
+		client.search(searchTerm, function (err, results) {
+			if (err) {
+					console.log(err);
+					return;
+			}
+
+			var file =  results.response.docs[0].contents;
+			var fileName = results.response.docs[0].title;
+			fileName = fileName.replace(/[#@!$^%*&()=~`'"{|}]/g, "");
+			fileName += ".txt";
+			res.setHeader('Content-type', "application/octet-stream");
+			res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+			res.send(file);
+
+		});
+	}
+	else {
+		res.redirect('/');
+	}
+
+	
 });
 
 // Create Text File for Solr Entry
