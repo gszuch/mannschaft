@@ -150,7 +150,7 @@ app.get('/file/:docID', function(req,res) {
 			}
 
 			var fileName = results.response.docs[0].title;
-			var file =  results.response.docs[0].contents;
+			var file =  results.response.docs[0].contents[0];
 			console.log("Download: " + file);
 			//fileName = fileName.replace(/[#@!$^%*&()=~`'"{|}]/g, "");
 			fileName += ".txt";
