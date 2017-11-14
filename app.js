@@ -34,7 +34,7 @@ const cookieSessionMath = {
 
 // set up handlebars view engine
 const Hbs = require('express-handlebars')
-	.create({ 
+	.create({
 		extname: '.hbs',
 		defaultLayout: 'main',
 		partialsDir: 'views/partials/',
@@ -45,6 +45,7 @@ app.set('view engine', 'hbs');
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(Express.static(Path.join(__dirname + '/public')));
 app.use('/document', Express.static(__dirname + '/public'));
 app.use(BodyParser.json());
@@ -66,7 +67,7 @@ app.post(['/','/login'], function(req, res) {
 	login.loginPost(req,res);
 });
 
-// File Manager 
+// File Manager
 var fileManager = require('./includes/fileManager.js');
 app.get('/file-manager', function(req,res){
 	console.log("FM Request: " + req.session.user.author);
@@ -95,7 +96,7 @@ app.get("/document/:docID", function(req,res) {
 // File Download
 app.get('/file/:docID', function(req,res) {
 	if (typeof req.session.user !== 'undefined') {
-		
+
 		console.log("ID: " + req.params.docID);
 		var query = "id:" + req.params.docID;
 		var searchTerm = client.query().q(query);
@@ -113,20 +114,20 @@ app.get('/file/:docID', function(req,res) {
 			res.setHeader('Content-type', "application/octet-stream");
 			res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
 			res.send(file);
-			
+
 		});
 	}
 	else {
 		res.redirect('/');
 	}
 
-	
+
 });
 
 // Create Text File for Solr Entry
 var createLogic = require('./includes/create.js');
 app.get('/create', function(req, res) {
-	createLogic.createGet(req, res);			
+	createLogic.createGet(req, res);
 });
 
 app.post('/create', function(req, res) {
