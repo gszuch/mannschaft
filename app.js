@@ -18,7 +18,7 @@ const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 var client = new SolrNode({
     host: '127.0.0.1',
     protocol: 'http',
-	core: 'testCore',
+	core: 'mannschaft',
 	port: '8983'
 });
 
@@ -45,7 +45,7 @@ app.set('view engine', 'hbs');
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(Express.static(Path.join(__dirname + '/public')));
 app.use('/document', Express.static(__dirname + '/public'));
 app.use(BodyParser.json());
@@ -73,6 +73,49 @@ app.get('/file-manager', function(req,res){
 	console.log("FM Request: " + req.session.user.author);
 	console.log("Date: " + Date.now());
 	fileManager.fileManagerGet(client, req, res);
+});
+
+
+// Searching the File Manager
+app.post('/file-manager', function(req,res) {
+
+	console.log("User wants to search the file manager...");
+	console.log("Search Term: " + req.body.searchTerm);
+	 if (typeof req.session.user !== 'undefined') {
+
+        // Pull from solr
+        console.log("Retrieving records from Solr...");
+		var term = "title:*" + req.body.searchTerm + "*";
+        var searchTerm = client.query().q(term);
+        client.search(searchTerm, function (err, results) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            // Check to see if any docs or empty
+            var resultDocs = "";
+            if (typeof results.response.docs !== 'undefined') {
+               resultDocs = results.response.docs;
+            }
+
+            res.render('file-manager', {
+                title: 'Search Results',
+                hasHeader: true,
+				hasHeaderUpload: true,
+				hasHeaderBreadcrumbs: true,
+				breadcrumbsPath: '/file-manager',
+				breadcrumbsText: 'File Manager',
+                footerBorder: true,
+                hasLogout: true,
+                docs: resultDocs
+            });
+        });
+
+    }
+    else {
+        res.redirect('/');
+    };
 });
 
 // Upload

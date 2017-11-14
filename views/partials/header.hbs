@@ -5,12 +5,14 @@
         </div>
         <div class="col-md-5"></div>
         <div class="col-md-4 search">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
-                <span class="input-group-btn">
-			        <button class="btn btn-secondary" type="button">Go!</button>
-			      </span>
-            </div>
+            <form action="/file-manager" method="post">
+                <div class="input-group">
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                    <span class="input-group-btn">
+                        <input type="submit" class="btn btn-secondary" value="Go">
+                    </span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
