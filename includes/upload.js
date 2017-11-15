@@ -32,14 +32,15 @@ function uploadPost(RandomID, client, fs, req, res) {
 	var d = new Date();
 	var month = d.getMonth() + 1;
 	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-	var id = RandomID(10, "0");
+	var id = Date.now();
 
 	fs.readFile(req.file.path, 'utf8', function(err, contents) {
 		var fileContents = contents;
     	var fileActual = req.file.originalname;
     	var fileName = req.body.name;
     	var fileAuthor = req.body.author;
-    	var fileDescription = req.body.description;
+		var fileDescription = req.body.description;
+		var branchID = 0;
 		var fileStatus;
 		
 		// Assemble object to add to Solr
@@ -50,7 +51,8 @@ function uploadPost(RandomID, client, fs, req, res) {
 			author: fileAuthor,
 			description : fileDescription,
 			contents : fileContents,
-			date: testDate
+			date: testDate,
+			branchID: branchID
 		};
 
 		console.log(testObj);

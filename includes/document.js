@@ -5,38 +5,46 @@ function documentGet(client, req, res) {
 		var query = "id:" + req.params.docID;
 		var searchTerm = client.query().q(query);
         client.search(searchTerm, function (err, results) {
-            if (err) {
-                console.log(err);
-                return;
-			}
+            if (err) { console.log(err); return; }
 			
-            console.log('Title: ', results.response.docs[0].title);
-			
-			// Replace all instances of \n with <br/>
-			var formattedFileContent = results.response.docs[0].contents;
-			console.log("Contents: " + formattedFileContent);
+			// Check for versions
+			var versionQuery = "branchID:" + req.params.docID;
+			var versionSearchTerm = client.query().q(versionQuery);
 
-            res.render('document',{
-				// replace w/ dynamic document name from querystring
-	
-				title: results.response.docs[0].title,
-				// replace w/ dynamic document description
-				subtitle: results.response.docs[0].description,
-				hasHeader: true,
+			client.search(versionSearchTerm, function(err,versionResults) {
 				
-				hasHeaderBreadcrumbs: true,
-				breadcrumbsPath: '/file-manager',
-				breadcrumbsText: 'File Manager',
-	
-				hasHeaderDownload: true,
-				fileID: results.response.docs[0].id,
-				uploadDate: results.response.docs[0].date,
+				if (err) { console.log(err); return; }
 
-				contents: formattedFileContent,
-	
-				footerBorder: true,
-				hasLogout: true
+				console.log("Versions: " + versionResults.response.docs);
+				// Replace all instances of \n with <br/>
+				var formattedFileContent = results.response.docs[0].contents;
+				console.log("Contents: " + formattedFileContent);
+
+           		res.render('document',{
+					// replace w/ dynamic document name from querystring
+		
+					title: results.response.docs[0].title,
+					// replace w/ dynamic document description
+					subtitle: results.response.docs[0].description,
+					hasHeader: true,
+					
+					hasHeaderBreadcrumbs: true,
+					breadcrumbsPath: '/file-manager',
+					breadcrumbsText: 'File Manager',
+		
+					hasHeaderDownload: true,
+					fileID: results.response.docs[0].id,
+					uploadDate: results.response.docs[0].date,
+
+					versions: versionResults.response.docs,
+					contents: formattedFileContent,
+		
+					footerBorder: true,
+					hasLogout: true
+				});
 			});
+			
+			
         });
 
 		

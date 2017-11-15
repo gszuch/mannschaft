@@ -38,14 +38,16 @@ const Hbs = require('express-handlebars')
 		extname: '.hbs',
 		defaultLayout: 'main',
 		partialsDir: 'views/partials/',
-		layoutsDir: 'views/layouts/'
+		layoutsDir: 'views/layouts/',
+		helpers: require("./public/js/helpers.js").helpers
 	});
+
 app.engine('hbs', Hbs.engine);
 app.set('view engine', 'hbs');
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(Express.static(Path.join(__dirname + '/public')));
 app.use('/document', Express.static(__dirname + '/public'));
 app.use(BodyParser.json());
@@ -128,13 +130,108 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 	uploadLogic.uploadPost(RandomID, client, fs, req, res);
 });
 
+// Upload to Branch
+app.get('/upload-branch', function(req, res) {
+
+	if (typeof req.session.user !== 'undefined') {
+		
+		// Search for Solr Document Title based on URL ID
+		var query = "id:" + req.query.id;
+		var searchTerm = client.query().q(query);
+		client.search(searchTerm, function (err, results) {
+			if (err) {
+					console.log(err);
+					return;
+			}
+
+			var fileName = results.response.docs[0].title;
+			
+			res.render('upload', {
+				title: 'Upload File to Branch',
+				containerName: 'upload-form',
+				hasHeader: true,
+				hasHeaderUpload: false,
+	
+				fileName: fileName,
+
+				// breadcrumbs should be converted to something
+				// more modular, perhaps a module?
+				hasHeaderBreadcrumbs: true,
+				breadcrumbsPath: '/file-manager',
+				breadcrumbsText: 'File Manager',
+	
+				id: req.query.id,
+	
+				hasTitleRowBorder: true,
+				footerBorder: true,
+				hasLogout: true
+			});
+		});
+
+		
+	}
+	else {
+		res.redirect('/');
+	}
+
+});
+
+app.post("/upload-branch", upload.single("uploadedFile"), function(req, res) {
+	// Just for testing
+	var d = new Date();
+	var month = d.getMonth() + 1;
+	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+	var id = Date.now();
+
+	fs.readFile(req.file.path, 'utf8', function(err, contents) {
+		var fileContents = contents;
+    	var fileActual = req.file.originalname;
+    	var fileName = req.body.name;
+    	var fileAuthor = req.body.author;
+		var fileDescription = req.body.description;
+		
+		// Document ID of parent doc
+		var branchID = req.body.docID;
+		var fileStatus;
+		
+		// Assemble object to add to Solr
+		var testObj = {
+			id: id, 
+			title : fileName,
+			actual : fileActual, 
+			author: fileAuthor,
+			description : fileDescription,
+			contents : fileContents,
+			date: testDate,
+			branchID: branchID
+		};
+
+		console.log(testObj);
+
+		// Update Solr
+		
+		client.update(testObj, function(err, result) {
+			if (err) {
+				console.log(err);
+				console.log("Document could not be added!");
+			}
+			else {
+				console.log("Document added to Solr!");
+			}
+			console.log("Response: ", result.responseHeader);
+				
+			res.redirect('/file-manager');
+		});
+		
+	});
+	
+});
 // Document
 var documentLogic = require("./includes/document.js");
 app.get("/document/:docID", function(req,res) {
 	console.log("D Request: " + req.session.user.author);
 	documentLogic.documentGet(client, req, res);
 });
-
 
 // File Download
 app.get('/file/:docID', function(req,res) {

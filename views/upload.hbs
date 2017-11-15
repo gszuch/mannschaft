@@ -1,4 +1,4 @@
-<form action="/upload" method="POST" enctype="multipart/form-data">
+<form {{#if fileName}}action="/upload-branch"{{else}}action="/upload"{{/if}} method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -7,7 +7,12 @@
             </div>
             <div class="form-group">
                 <label for="title">Title</label>
-                <input name="name" class="form-control" type="text" placeholder="Title">
+                {{#if fileName}}
+                    <input name="name" value="{{ fileName }}" class="form-control" type="text" placeholder="Title" readonly="true">
+                    <input name="docID" type="hidden" value="{{ id }}">
+                {{else}}
+                    <input name="name" class="form-control" type="text" placeholder="Title">
+                {{/if}}
             </div>
             <div class="form-group">
                 <label for="author">Author</label>

@@ -1,3 +1,4 @@
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -9,14 +10,15 @@
     </thead>
     <tbody>
         {{#each docs}}
+        {{#equals branchID 0}}
         <tr>
             <td><i class="fa fa-file-text" aria-hidden="true"></i></td>
-            <td><a href="document/{{ id }}">{{ title }}</a></td>
+            <td><a href="document/{{ id }}">{{branchID}}{{ title }}</a></td>
             <td class="last-modified">{{ date }}</td>
-            <td><a href="branch-type"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <a href="file/{{id}}"><i class="fa fa-download"
+            <td><a href="/branch-type?id={{ id }}"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <a href="file/{{id}}"><i class="fa fa-download"
                     aria-hidden="true"></i></a></td>
         </tr>
-
+        {{/equals}}
         {{/each}}
     </tbody>
 </table>
