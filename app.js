@@ -87,7 +87,7 @@ app.post('/file-manager', function(req,res) {
 
         // Pull from solr
         console.log("Retrieving records from Solr...");
-		var term = "title:*" + req.body.searchTerm + "*";
+		var term = "*" + req.body.searchTerm + "*";
         var searchTerm = client.query().q(term);
         client.search(searchTerm, function (err, results) {
             if (err) {
