@@ -36,8 +36,16 @@ body {
 	margin-top: 10px;
 }
 .search .btn, .upload .btn, .login .btn, .right-file-details .btn, .card .btn, .upload-btn .btn {
-	background-color: #2268bb;
+	background-color: #2268bb !important;
 	color: #FFF;
+}
+
+#finalMerge a {
+	background-color: #2268bb !important;
+}
+.merge-btn {
+	padding-left: 10px;
+	padding-right:10px;
 }
 .footer {
 	text-align: center;
@@ -92,11 +100,17 @@ table td, table th {
 .edit-buttons {
 	padding-top: 20px;
 }
-
-.headerLink {
-	
+.textFileContents {
+	word-wrap:break;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
 }
 
+.hiddenColumn {
+	display:none;
+}
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575px) {  
 	table { overflow-x: scroll;}

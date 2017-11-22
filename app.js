@@ -123,6 +123,44 @@ app.post('/file-manager', function(req,res) {
     };
 });
 
+// Merge
+app.post("/merge", function(req, res) {
+
+	/*
+	console.log("Merge: " + req.body.merge);
+	console.log("New Title: " + req.body.newTitle);
+
+	var mainContents = "";
+
+	for (var i = 0; i < req.body.merge.length; i++) {
+		var query = "id:" + req.body.merge[i];
+		var searchTerm = client.query().q(query);
+        client.search(searchTerm, function (err, results) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+			else {
+				//console.log("Contents: " + results.response.docs[0].contents + "\n");
+				mainContents += results.response.docs[0].contents[0];
+				if (i == req.body.merge.length-1) {
+					finish();
+				}
+			}
+		});
+	}
+
+	function finish() {
+		console.log("final: " + typeof mainContents);
+	}
+	
+	*/
+	// https://www.npmjs.com/package/node-async-loop for idea on how to finish...
+
+	//res.redirect("/file-manager");
+
+});
+
 // Upload
 var uploadLogic = require('./includes/upload.js');
 app.get('/upload', function(req,res){
@@ -229,6 +267,7 @@ app.post("/upload-branch", upload.single("uploadedFile"), function(req, res) {
 	});
 	
 });
+
 // Document
 var documentLogic = require("./includes/document.js");
 app.get("/document/:docID", function(req,res) {

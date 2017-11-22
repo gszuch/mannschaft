@@ -22,6 +22,7 @@ function fileManagerGet(client, req, res) {
             res.render('file-manager', {
                 title: 'File Manager',
                 hasHeader: true,
+                hasHeaderMerge: true,
                 hasHeaderUpload: true,
                 footerBorder: true,
                 hasLogout: true,

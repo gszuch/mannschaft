@@ -7,7 +7,11 @@ function branchGet(req, res) {
 		var query = url_parts.query;
 		*/
 
-		console.log("Query ID: " + req.query.id);
+		if (typeof req.query.id !== 'undefined') {
+			res.redirect('/upload-branch?id=' + req.query.id);
+		}
+
+		/*console.log("Query ID: " + req.query.id);
 		
 		res.render('branch-type',{
 			title: 'Branch File',
@@ -22,6 +26,7 @@ function branchGet(req, res) {
 			footerBorder: true,
 			hasLogout: true
 		});
+		*/
 	}
 	else {
 		res.redirect('/');
