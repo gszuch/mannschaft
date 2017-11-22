@@ -1,13 +1,13 @@
 <div class="container">
     <div class="row header-row">
         <div class="col-md-3 logo">
-            <h2>Mannschaft</h2>
+            <a href="/file-manager" class="headerLink"><h2>Mannschaft</h2></a>
         </div>
         <div class="col-md-5"></div>
         <div class="col-md-4 search">
             <form action="/file-manager" method="post">
                 <div class="input-group">
-                    <input type="text" name="searchTerm" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                    <input type="text" id="searchTerm" value="{{ searchValue }}" name="searchTerm" class="form-control" placeholder="Search for..." aria-label="Search for...">
                     <span class="input-group-btn">
                         <input type="submit" class="btn btn-secondary" value="Go">
                     </span>

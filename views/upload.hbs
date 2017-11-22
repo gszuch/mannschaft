@@ -1,3 +1,15 @@
+{{#if showError}}
+<div class="row">
+    <div class="alert alert-danger col-lg-12 col-center">
+        {{#if errorDefinition}} 
+            {{ errorDefinition }}
+        {{else}}
+            Error! Please try again.
+        {{/if}}
+    </div>
+</div>
+{{/if}}
+
 <form {{#if fileName}}action="/upload-branch"{{else}}action="/upload"{{/if}} method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col">

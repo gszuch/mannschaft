@@ -18,7 +18,7 @@ const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 var client = new SolrNode({
     host: '127.0.0.1',
     protocol: 'http',
-	core: 'mannschaft',
+	core: 'mannschaft-3',
 	port: '8983'
 });
 
@@ -101,11 +101,14 @@ app.post('/file-manager', function(req,res) {
                resultDocs = results.response.docs;
             }
 
+			console.log("Search Value: " + req.body.searchTerm);
+
             res.render('file-manager', {
                 title: 'Search Results',
                 hasHeader: true,
 				hasHeaderUpload: true,
 				hasHeaderBreadcrumbs: true,
+				searchValue: req.body.searchTerm,
 				breadcrumbsPath: '/file-manager',
 				breadcrumbsText: 'File Manager',
                 footerBorder: true,
