@@ -38,8 +38,23 @@
 <pre style="font-family: arial;">{{ contents }}</pre>
 
 <h3>Versions</h3>
-<ul>
-{{#each versions}}
-    <li>{{ date }} - {{ description }}</li>
-{{/each}}
-</ul>
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Author</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        {{#each versions}}
+            <tr>
+                <td> {{ date }} </td>
+                <td> {{ description }} </td>
+                <td> {{ author }} </td>
+                <td> <a href="../file/{{id}}"><i class="fa fa-download"
+                    aria-hidden="true"></i></a> </td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>
