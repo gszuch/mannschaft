@@ -8,15 +8,15 @@ function uploadBranchGet(client, req, res) {
 	if (typeof req.session.user !== 'undefined') {
 		
 		// Search for Solr Document Title based on URL ID
-		var query = "id:" + req.query.id;
-		var searchTerm = client.query().q(query);
+		const query = "id:" + req.query.id;
+		const searchTerm = client.query().q(query);
 		client.search(searchTerm, function (err, results) {
 			if (err) {
 					console.log(err);
 					return;
 			}
 
-			var fileName = results.response.docs[0].title;
+			const fileName = results.response.docs[0].title;
 			
 			res.render('upload', {
 				title: 'Upload File to Branch',
@@ -54,24 +54,24 @@ function uploadBranchGet(client, req, res) {
  */
 function uploadBranchPost(client, fs, req, res) {
 	
-	var d = new Date();
-	var month = d.getMonth() + 1;
-	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-	var id = Date.now();
+	const d = new Date();
+	const month = d.getMonth() + 1;
+	const testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+	const id = Date.now();
 
 	fs.readFile(req.file.path, 'utf8', function(err, contents) {
-		var fileContents = contents;
-    	var fileActual = req.file.originalname;
-    	var fileName = req.body.name;
-    	var fileAuthor = req.body.author;
-		var fileDescription = req.body.description;
+		const fileContents = contents;
+    	const fileActual = req.file.originalname;
+    	const fileName = req.body.name;
+    	const fileAuthor = req.body.author;
+		const fileDescription = req.body.description;
 		
 		// Document ID of parent doc
-		var branchID = req.body.docID;
-		var fileStatus;
+		const branchID = req.body.docID;
+		const fileStatus;
 		
 		// Assemble object to add to Solr
-		var testObj = {
+		const testObj = {
 			id: id, 
 			title : fileName,
 			actual : fileActual, 

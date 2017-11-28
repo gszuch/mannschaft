@@ -6,11 +6,11 @@
  */
 function mergePost(client, req, res) {
 	
-	var mainContents = "";
-	var query = "";
+	const mainContents = "";
+	const query = "";
 
 	// Assemble the solr search query 
-	for (var i = 0; i < req.body.merge.length; i++) {
+	for (const i = 0; i < req.body.merge.length; i++) {
 	
 		if (i == 0) {
 			query += "id:" + req.body.merge[i];
@@ -21,11 +21,11 @@ function mergePost(client, req, res) {
 
 	}
 
-	var mergedContents = "";
-	var mergedDescription = "";
-	var mergedAuthor = "";
+	const mergedContents = "";
+	const mergedDescription = "";
+	const mergedAuthor = "";
 
-	var searchTerm = client.query().q(query);
+	const searchTerm = client.query().q(query);
 
     client.search(searchTerm, function (err, results) {
         if (err) {
@@ -34,7 +34,7 @@ function mergePost(client, req, res) {
         }
 		else {
 
-			for (var i = 0; i < results.response.docs.length; i++) {
+			for (const i = 0; i < results.response.docs.length; i++) {
 				mergedContents += results.response.docs[i].contents + "\n\n";
 				mergedDescription += results.response.docs[i].description + "\n\n";
 				if (i == 0) {
@@ -45,19 +45,19 @@ function mergePost(client, req, res) {
 				}
 			}
 
-			var d = new Date();
-			var month = d.getMonth() + 1;
-			var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+			const d = new Date();
+			const month = d.getMonth() + 1;
+			const testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
 
-			var id = Date.now();
-			var fileName = req.body.newTitle;
-			var fileActual = req.body.newTitle + ".txt";
-			var fileAuthor = mergedAuthor;
-			var fileDescription = mergedDescription;
-			var fileContents = mergedContents;
-			var branchID = 0;
+			const id = Date.now();
+			const fileName = req.body.newTitle;
+			const fileActual = req.body.newTitle + ".txt";
+			const fileAuthor = mergedAuthor;
+			const fileDescription = mergedDescription;
+			const fileContents = mergedContents;
+			const branchID = 0;
 
-			var testObj = {
+			const testObj = {
 				id: id, 
 				title : fileName,
 				actual : fileActual, 

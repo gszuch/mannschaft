@@ -38,22 +38,22 @@ function uploadPost(client, fs, req, res) {
 	
 	if (typeof req.file !== 'undefined') {
 		
-		var d = new Date();
-		var month = d.getMonth() + 1;
-		var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-		var id = Date.now();
+		const d = new Date();
+		const month = d.getMonth() + 1;
+		const testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+		const id = Date.now();
 
 		fs.readFile(req.file.path, 'utf8', function(err, contents) {
-			var fileContents = contents;
-			var fileActual = req.file.originalname;
-			var fileName = req.body.name;
-			var fileAuthor = req.body.author;
-			var fileDescription = req.body.description;
-			var branchID = 0;
-			var fileStatus;
+			const fileContents = contents;
+			const fileActual = req.file.originalname;
+			const fileName = req.body.name;
+			const fileAuthor = req.body.author;
+			const fileDescription = req.body.description;
+			const branchID = 0;
+			const fileStatus;
 			
 			// Assemble object to add to Solr
-			var testObj = {
+			const testObj = {
 				id: id, 
 				title : fileName,
 				actual : fileActual, 
@@ -65,8 +65,8 @@ function uploadPost(client, fs, req, res) {
 			};
 
 			// Getting file size
-			var stats = fs.statSync(req.file.path);
-			var fileSize = stats.size;
+			const stats = fs.statSync(req.file.path);
+			const fileSize = stats.size;
 
 			if (fileSize <= 999999999) {
 

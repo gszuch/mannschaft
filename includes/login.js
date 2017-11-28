@@ -39,7 +39,7 @@ function loginPost(req, res) {
 	if (req.body.username == username && req.body.password == password) {
 
 		// Setup user object to store in session
-		var user = { name: username, author: author };
+		const user = { name: username, author: author };
 		req.session.user = user;
 
 		res.redirect('/file-manager');

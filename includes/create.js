@@ -35,21 +35,21 @@ function createGet(req, res) {
 function createPost(req,res) {
 
 	// Just for testing
-	var d = new Date();
-	var month = d.getMonth() + 1;
-	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-	var id = RandomID(10, "0");
+	const d = new Date();
+	const month = d.getMonth() + 1;
+	const testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
+	const id = RandomID(10, "0");
 
 	// Get form info
-	var fileContents = req.body.contents;
-	var fileActual = req.body.name;
-	var fileName = req.body.name;
-	var fileAuthor = req.body.author;
-	var fileDescription = req.body.description;
-	var fileStatus;
+	const fileContents = req.body.contents;
+	const fileActual = req.body.name;
+	const fileName = req.body.name;
+	const fileAuthor = req.body.author;
+	const fileDescription = req.body.description;
+	const fileStatus;
 	
 	// Assemble object to add to Solr
-	var testObj = {
+	const testObj = {
 		id: id,
 		title : fileName,
 		actual : fileActual, 

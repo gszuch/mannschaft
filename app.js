@@ -15,7 +15,7 @@ const app = Express();
 const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 
 // Connecting to Solr
-var client = new SolrNode({
+const client = new SolrNode({
     host: '127.0.0.1',
     protocol: 'http',
 	core: 'mannschaft',
@@ -59,7 +59,7 @@ app.use(Session({
 }));
 
 // primary views and relevant routes / aliases
-var login = require('./includes/login.js');
+const login = require('./includes/login.js');
 app.get(['/','/login'], function(req,res){
 	login.loginGet(req,res);
 });
@@ -69,7 +69,7 @@ app.post(['/','/login'], function(req, res) {
 });
 
 // File Manager
-var fileManager = require('./includes/fileManager.js');
+const fileManager = require('./includes/fileManager.js');
 app.get('/file-manager', function(req,res){
 	fileManager.fileManagerGet(client, req, res);
 });
@@ -80,13 +80,13 @@ app.post('/file-manager', function(req,res) {
 });
 
 // Merge
-var mergeLogic = require("./includes/merge.js");
+const mergeLogic = require("./includes/merge.js");
 app.post("/merge", function(req, res) {
 	mergeLogic.mergePost(client, req, res);
 });
 
 // Upload
-var uploadLogic = require('./includes/upload.js');
+const uploadLogic = require('./includes/upload.js');
 app.get('/upload', function(req,res){
 	uploadLogic.uploadGet(req, res);
 });

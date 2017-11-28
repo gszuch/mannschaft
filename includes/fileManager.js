@@ -9,8 +9,8 @@ function fileManagerGet(client, req, res) {
     if (typeof req.session.user !== 'undefined') {
 
         // Pull from solr
-        var diffTerm = "q=*:*&sort=id desc";
-        var searchTerm = client.query().q('*:*');
+        const diffTerm = "q=*:*&sort=id desc";
+        const searchTerm = client.query().q('*:*');
         client.search(diffTerm, function (err, results) {
             if (err) {
                 console.log(err);
@@ -18,7 +18,7 @@ function fileManagerGet(client, req, res) {
             }
 
             // Check to see if any docs or empty
-            var resultDocs = "";
+            const resultDocs = "";
             if (typeof results.response.docs !== 'undefined') {
                resultDocs = results.response.docs;
             }
@@ -50,8 +50,8 @@ function fileManagerPost(client, req, res) {
      if (typeof req.session.user !== 'undefined') {
 
         // Pull from solr
-        var term = "*" + req.body.searchTerm + "*";
-        var searchTerm = client.query().q(term);
+        const term = "*" + req.body.searchTerm + "*";
+        const searchTerm = client.query().q(term);
         client.search(searchTerm, function (err, results) {
             if (err) {
                 console.log(err);
@@ -59,7 +59,7 @@ function fileManagerPost(client, req, res) {
             }
 
             // Check to see if any docs or empty
-            var resultDocs = "";
+            const resultDocs = "";
             if (typeof results.response.docs !== 'undefined') {
                resultDocs = results.response.docs;
             }

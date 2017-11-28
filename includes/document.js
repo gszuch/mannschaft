@@ -8,21 +8,21 @@ function documentGet(client, req, res) {
 
     if (typeof req.session.user !== 'undefined') {
 
-		var query = "id:" + req.params.docID;
-		var searchTerm = client.query().q(query);
+		const query = "id:" + req.params.docID;
+		const searchTerm = client.query().q(query);
         client.search(searchTerm, function (err, results) {
             if (err) { console.log(err); return; }
 			
 			// Check for versions
-			var versionQuery = "branchID:" + req.params.docID;
-			var versionSearchTerm = client.query().q(versionQuery);
+			const versionQuery = "branchID:" + req.params.docID;
+			const versionSearchTerm = client.query().q(versionQuery);
 
 			client.search(versionSearchTerm, function(err,versionResults) {
 				
 				if (err) { console.log(err); return; }
 
 				// Replace all instances of \n with <br/>
-				var formattedFileContent = results.response.docs[0].contents;
+				const formattedFileContent = results.response.docs[0].contents;
 				
            		res.render('document', {
 		
