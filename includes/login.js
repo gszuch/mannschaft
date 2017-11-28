@@ -1,7 +1,7 @@
 /**
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} req 
+ * @param {object} res 
  */
 function loginGet(req, res) {
     
@@ -24,8 +24,8 @@ function loginGet(req, res) {
 
 /**
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} req 
+ * @param {object} res 
  */
 function loginPost(req, res) {
     let showError = false;

@@ -1,8 +1,8 @@
 /**
  * 
- * @param {*} client 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} client 
+ * @param {object} req 
+ * @param {object} res 
  */
 function uploadBranchGet(client, req, res) {
 	if (typeof req.session.user !== 'undefined') {
@@ -47,10 +47,10 @@ function uploadBranchGet(client, req, res) {
 
 /**
  * 
- * @param {*} client 
- * @param {*} fs 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} client 
+ * @param {object} fs 
+ * @param {object} req 
+ * @param {object} res 
  */
 function uploadBranchPost(client, fs, req, res) {
 	

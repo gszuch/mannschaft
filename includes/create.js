@@ -1,7 +1,7 @@
 /**
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} req 
+ * @param {object} res 
  */
 function createGet(req, res) {
 
@@ -29,8 +29,8 @@ function createGet(req, res) {
 
 /**
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} req 
+ * @param {object} res 
  */
 function createPost(req,res) {
 

@@ -1,8 +1,8 @@
 /**
  * 
- * @param {*} client 
- * @param {*} req 
- * @param {*} res 
+ * @param {object} client 
+ * @param {object} req 
+ * @param {object} res 
  */
 function fileGet(client, req, res) {
 
