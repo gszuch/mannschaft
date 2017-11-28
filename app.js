@@ -44,7 +44,6 @@ const Hbs = require('express-handlebars')
 
 app.engine('hbs', Hbs.engine);
 app.set('view engine', 'hbs');
-
 app.set('port', process.env.PORT || 3000);
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -129,7 +128,7 @@ app.post('/create', function(req, res) {
 	createLogic.createPost(req, res);
 });
 
-// Branch Type - DEPRECATED
+// Branch Type - DONT REMOVE
 var branchLogic = require('./includes/branch.js');
 app.get('/branch-type', function(req,res){
 	branchLogic.branchGet(req, res);

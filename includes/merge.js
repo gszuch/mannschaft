@@ -5,8 +5,7 @@ function mergePost(client, req, res) {
 
 	// Assemble the solr search query 
 	for (var i = 0; i < req.body.merge.length; i++) {
-		//console.log("i: " + i);
-
+	
 		if (i == 0) {
 			query += "id:" + req.body.merge[i];
 		}
@@ -21,6 +20,7 @@ function mergePost(client, req, res) {
 	var mergedAuthor = "";
 
 	var searchTerm = client.query().q(query);
+
     client.search(searchTerm, function (err, results) {
         if (err) {
             console.log(err);
@@ -29,7 +29,6 @@ function mergePost(client, req, res) {
 		else {
 
 			for (var i = 0; i < results.response.docs.length; i++) {
-				//console.log("i: " + results.response.docs[i].contents);
 				mergedContents += results.response.docs[i].contents + "\n\n";
 				mergedDescription += results.response.docs[i].description + "\n\n";
 				if (i == 0) {

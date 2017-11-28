@@ -8,8 +8,6 @@ function createGet(req, res) {
             hasHeader: true,
             hasHeaderUpload: false,
 
-            // breadcrumbs should be converted to something
-            // more modular, perhaps a module?
             hasHeaderBreadcrumbs: true,
             breadcrumbsPath: '/create',
             breadcrumbsText: 'Create File',

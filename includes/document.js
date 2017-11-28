@@ -18,11 +18,9 @@ function documentGet(client, req, res) {
 				// Replace all instances of \n with <br/>
 				var formattedFileContent = results.response.docs[0].contents;
 				
-           		res.render('document',{
-					// replace w/ dynamic document name from querystring
+           		res.render('document', {
 		
 					title: results.response.docs[0].title,
-					// replace w/ dynamic document description
 					subtitle: results.response.docs[0].description,
 					hasHeader: true,
 					
@@ -40,8 +38,8 @@ function documentGet(client, req, res) {
 					footerBorder: true,
 					hasLogout: true
 				});
+
 			});
-			
 			
         });
 

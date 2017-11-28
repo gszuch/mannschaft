@@ -4,7 +4,6 @@ function fileManagerGet(client, req, res) {
     if (typeof req.session.user !== 'undefined') {
 
         // Pull from solr
-
         var diffTerm = "q=*:*&sort=id desc";
         var searchTerm = client.query().q('*:*');
         client.search(diffTerm, function (err, results) {

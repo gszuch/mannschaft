@@ -7,8 +7,6 @@ function uploadGet(req, res) {
             hasHeader: true,
             hasHeaderUpload: false,
 
-            // breadcrumbs should be converted to something
-            // more modular, perhaps a module?
             hasHeaderBreadcrumbs: true,
             breadcrumbsPath: '/file-manager',
             breadcrumbsText: 'File Manager',
@@ -27,7 +25,7 @@ function uploadPost(RandomID, client, fs, req, res) {
     // Upload file form
 	
 	if (typeof req.file !== 'undefined') {
-		// Just for testing
+		
 		var d = new Date();
 		var month = d.getMonth() + 1;
 		var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
@@ -57,8 +55,6 @@ function uploadPost(RandomID, client, fs, req, res) {
 			// Getting file size
 			var stats = fs.statSync(req.file.path);
 			var fileSize = stats.size;
-
-			//console.log("File Size: " + fileSize);
 
 			if (fileSize <= 999999999) {
 
@@ -128,8 +124,6 @@ function uploadPost(RandomID, client, fs, req, res) {
             hasHeader: true,
             hasHeaderUpload: false,
 
-            // breadcrumbs should be converted to something
-            // more modular, perhaps a module?
             hasHeaderBreadcrumbs: true,
             breadcrumbsPath: '/file-manager',
             breadcrumbsText: 'File Manager',

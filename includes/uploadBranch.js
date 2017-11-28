@@ -20,8 +20,6 @@ function uploadBranchGet(client, req, res) {
 	
 				fileName: fileName,
 
-				// breadcrumbs should be converted to something
-				// more modular, perhaps a module?
 				hasHeaderBreadcrumbs: true,
 				breadcrumbsPath: '/file-manager',
 				breadcrumbsText: 'File Manager',
@@ -42,7 +40,7 @@ function uploadBranchGet(client, req, res) {
 }
 
 function uploadBranchPost(client, fs, req, res) {
-	// Just for testing
+	
 	var d = new Date();
 	var month = d.getMonth() + 1;
 	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
@@ -72,7 +70,6 @@ function uploadBranchPost(client, fs, req, res) {
 		};
 
 		// Update Solr
-		
 		client.update(testObj, function(err, result) {
 			if (err) {
 				console.log(err);
@@ -81,7 +78,6 @@ function uploadBranchPost(client, fs, req, res) {
 			else {
 				console.log("Document added to Solr!");
 			}
-			//console.log("Response: ", result.responseHeader);
 				
 			res.redirect('/file-manager');
 		});

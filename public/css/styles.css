@@ -116,6 +116,7 @@ table td, table th {
 	font-size: 10px;
 	padding:5px;
 }
+
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575px) {  
 	table { overflow-x: scroll;}

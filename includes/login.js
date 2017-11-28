@@ -7,7 +7,6 @@ function loginGet(req, res) {
     }
     else {
         // Session does not exist, show login
-        
         let showError = false;
         if(req.query.q==='showError')
             showError = true;

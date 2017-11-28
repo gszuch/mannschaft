@@ -1,3 +1,4 @@
+// Provides an equals comparison in the handlebars template
 var register = function(Handlebars) {
     var helpers = {
         equals: function(val1,val2,options) {
@@ -8,13 +9,7 @@ var register = function(Handlebars) {
                 return options.inverse(this);
             }
             return null;
-        }/*,
-        notEquals: function(val1,val2,options) {
-            if (val1 != val2) {
-                return options.fn(this);
-            }
-            return null;
-        }*/
+        }
     };
 
     if (Handlebars && typeof Handlebars.registerHelper === "function") {
