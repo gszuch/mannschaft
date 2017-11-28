@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {*} client 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function documentGet(client, req, res) {
 
     if (typeof req.session.user !== 'undefined') {

@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {*} client 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function uploadBranchGet(client, req, res) {
 	if (typeof req.session.user !== 'undefined') {
 		
@@ -39,6 +45,13 @@ function uploadBranchGet(client, req, res) {
 	}
 }
 
+/**
+ * 
+ * @param {*} client 
+ * @param {*} fs 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function uploadBranchPost(client, fs, req, res) {
 	
 	var d = new Date();

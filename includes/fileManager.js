@@ -1,4 +1,9 @@
-
+/**
+ * 
+ * @param {*} client 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function fileManagerGet(client, req, res) {
     // If session established
     if (typeof req.session.user !== 'undefined') {
@@ -35,6 +40,12 @@ function fileManagerGet(client, req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} client 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function fileManagerPost(client, req, res) {
      if (typeof req.session.user !== 'undefined') {
 

@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function uploadGet(req, res) {
     if (typeof req.session.user !== 'undefined') {
 
@@ -21,6 +26,14 @@ function uploadGet(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} RandomID 
+ * @param {*} client 
+ * @param {*} fs 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function uploadPost(RandomID, client, fs, req, res) {
     // Upload file form
 	

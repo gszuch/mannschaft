@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {*} client 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function mergePost(client, req, res) {
 	
 	var mainContents = "";

@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function loginGet(req, res) {
     
     if (typeof req.session.user !== 'undefined') {
@@ -18,6 +22,11 @@ function loginGet(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function loginPost(req, res) {
     let showError = false;
 	let errorDefinition = false;

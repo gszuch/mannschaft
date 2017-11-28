@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function branchGet(req, res) {
     if (typeof req.session.user !== 'undefined') {
 

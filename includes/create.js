@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function createGet(req, res) {
 
     if (typeof req.session.user !== 'undefined') {
@@ -22,6 +27,11 @@ function createGet(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 function createPost(req,res) {
 
 	// Just for testing
@@ -65,6 +75,7 @@ function createPost(req,res) {
 	
 	res.redirect('/file-manager');
 }
+
 module.exports = {
     createGet: createGet,
     createPost: createPost
