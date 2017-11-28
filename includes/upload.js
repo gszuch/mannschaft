@@ -28,13 +28,12 @@ function uploadGet(req, res) {
 
 /**
  * 
- * @param {number} RandomID 
  * @param {object} client 
  * @param {object} fs 
  * @param {object} req 
  * @param {object} res 
  */
-function uploadPost(RandomID, client, fs, req, res) {
+function uploadPost(client, fs, req, res) {
     // Upload file form
 	
 	if (typeof req.file !== 'undefined') {

@@ -92,7 +92,7 @@ app.get('/upload', function(req,res){
 });
 
 app.post('/upload', upload.single("uploadedFile"), function(req, res) {
-	uploadLogic.uploadPost(RandomID, client, fs, req, res);
+	uploadLogic.uploadPost(client, fs, req, res);
 });
 
 // Upload to Branch
