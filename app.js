@@ -4,7 +4,7 @@ const Rollbar = require('rollbar');
 const Path = require('path');
 const BodyParser = require("body-parser");
 const Session = require("client-sessions");
-const SolrNode = require("solr-node");
+const SolrNode = require("./lib/solr-node");
 const fs = require("fs");
 const Multer = require("multer");
 const FileUpload = require("express-handlebars");
@@ -18,7 +18,7 @@ const rollbar = new Rollbar("e23f0a58640f4d118026e1dddc31b822");
 var client = new SolrNode({
     host: '127.0.0.1',
     protocol: 'http',
-	core: 'mannschaft-3',
+	core: 'mannschaft',
 	port: '8983'
 });
 
@@ -72,93 +72,18 @@ app.post(['/','/login'], function(req, res) {
 // File Manager
 var fileManager = require('./includes/fileManager.js');
 app.get('/file-manager', function(req,res){
-	console.log("FM Request: " + req.session.user.author);
-	console.log("Date: " + Date.now());
 	fileManager.fileManagerGet(client, req, res);
 });
 
-
 // Searching the File Manager
 app.post('/file-manager', function(req,res) {
-
-	console.log("User wants to search the file manager...");
-	console.log("Search Term: " + req.body.searchTerm);
-	 if (typeof req.session.user !== 'undefined') {
-
-        // Pull from solr
-        console.log("Retrieving records from Solr...");
-		var term = "*" + req.body.searchTerm + "*";
-        var searchTerm = client.query().q(term);
-        client.search(searchTerm, function (err, results) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-
-            // Check to see if any docs or empty
-            var resultDocs = "";
-            if (typeof results.response.docs !== 'undefined') {
-               resultDocs = results.response.docs;
-            }
-
-			console.log("Search Value: " + req.body.searchTerm);
-
-            res.render('file-manager', {
-                title: 'Search Results',
-                hasHeader: true,
-				hasHeaderUpload: true,
-				hasHeaderBreadcrumbs: true,
-				searchValue: req.body.searchTerm,
-				breadcrumbsPath: '/file-manager',
-				breadcrumbsText: 'File Manager',
-                footerBorder: true,
-                hasLogout: true,
-                docs: resultDocs
-            });
-        });
-
-    }
-    else {
-        res.redirect('/');
-    };
+	fileManager.fileManagerPost(client, req, res);
 });
 
 // Merge
+var mergeLogic = require("./includes/merge.js");
 app.post("/merge", function(req, res) {
-
-	/*
-	console.log("Merge: " + req.body.merge);
-	console.log("New Title: " + req.body.newTitle);
-
-	var mainContents = "";
-
-	for (var i = 0; i < req.body.merge.length; i++) {
-		var query = "id:" + req.body.merge[i];
-		var searchTerm = client.query().q(query);
-        client.search(searchTerm, function (err, results) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-			else {
-				//console.log("Contents: " + results.response.docs[0].contents + "\n");
-				mainContents += results.response.docs[0].contents[0];
-				if (i == req.body.merge.length-1) {
-					finish();
-				}
-			}
-		});
-	}
-
-	function finish() {
-		console.log("final: " + typeof mainContents);
-	}
-	
-	*/
-	// https://www.npmjs.com/package/node-async-loop for idea on how to finish...
-
-	//res.redirect("/file-manager");
-
+	mergeLogic.mergePost(client, req, res);
 });
 
 // Upload
@@ -172,138 +97,26 @@ app.post('/upload', upload.single("uploadedFile"), function(req, res) {
 });
 
 // Upload to Branch
+var uploadBranchLogic = require("./includes/uploadBranch.js")
 app.get('/upload-branch', function(req, res) {
-
-	if (typeof req.session.user !== 'undefined') {
-		
-		// Search for Solr Document Title based on URL ID
-		var query = "id:" + req.query.id;
-		var searchTerm = client.query().q(query);
-		client.search(searchTerm, function (err, results) {
-			if (err) {
-					console.log(err);
-					return;
-			}
-
-			var fileName = results.response.docs[0].title;
-			
-			res.render('upload', {
-				title: 'Upload File to Branch',
-				containerName: 'upload-form',
-				hasHeader: true,
-				hasHeaderUpload: false,
-	
-				fileName: fileName,
-
-				// breadcrumbs should be converted to something
-				// more modular, perhaps a module?
-				hasHeaderBreadcrumbs: true,
-				breadcrumbsPath: '/file-manager',
-				breadcrumbsText: 'File Manager',
-	
-				id: req.query.id,
-	
-				hasTitleRowBorder: true,
-				footerBorder: true,
-				hasLogout: true
-			});
-		});
-
-		
-	}
-	else {
-		res.redirect('/');
-	}
-
+	uploadBranchLogic.uploadBranchGet(client, req, res);
 });
 
 app.post("/upload-branch", upload.single("uploadedFile"), function(req, res) {
-	// Just for testing
-	var d = new Date();
-	var month = d.getMonth() + 1;
-	var testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
-	var id = Date.now();
-
-	fs.readFile(req.file.path, 'utf8', function(err, contents) {
-		var fileContents = contents;
-    	var fileActual = req.file.originalname;
-    	var fileName = req.body.name;
-    	var fileAuthor = req.body.author;
-		var fileDescription = req.body.description;
-		
-		// Document ID of parent doc
-		var branchID = req.body.docID;
-		var fileStatus;
-		
-		// Assemble object to add to Solr
-		var testObj = {
-			id: id, 
-			title : fileName,
-			actual : fileActual, 
-			author: fileAuthor,
-			description : fileDescription,
-			contents : fileContents,
-			date: testDate,
-			branchID: branchID
-		};
-
-		console.log(testObj);
-
-		// Update Solr
-		
-		client.update(testObj, function(err, result) {
-			if (err) {
-				console.log(err);
-				console.log("Document could not be added!");
-			}
-			else {
-				console.log("Document added to Solr!");
-			}
-			console.log("Response: ", result.responseHeader);
-				
-			res.redirect('/file-manager');
-		});
-		
-	});
-	
+	//console.log("File before logic call: " + req.file);
+	uploadBranchLogic.uploadBranchPost(client, fs, req, res);
 });
 
 // Document
 var documentLogic = require("./includes/document.js");
 app.get("/document/:docID", function(req,res) {
-	console.log("D Request: " + req.session.user.author);
 	documentLogic.documentGet(client, req, res);
 });
 
 // File Download
+var fileLogic = require("./includes/file.js");
 app.get('/file/:docID', function(req,res) {
-	if (typeof req.session.user !== 'undefined') {
-
-		console.log("ID: " + req.params.docID);
-		var query = "id:" + req.params.docID;
-		var searchTerm = client.query().q(query);
-		client.search(searchTerm, function (err, results) {
-			if (err) {
-					console.log(err);
-					return;
-			}
-
-			var fileName = results.response.docs[0].title;
-			var file =  results.response.docs[0].contents[0];
-			console.log("Download: " + file);
-			//fileName = fileName.replace(/[#@!$^%*&()=~`'"{|}]/g, "");
-			fileName += ".txt";
-			res.setHeader('Content-type', "application/octet-stream");
-			res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-			res.send(file);
-
-		});
-	}
-	else {
-		res.redirect('/');
-	}
-
-
+	fileLogic.fileGet(client, req, res);
 });
 
 // Create Text File for Solr Entry
@@ -316,7 +129,7 @@ app.post('/create', function(req, res) {
 	createLogic.createPost(req, res);
 });
 
-// Branch Type
+// Branch Type - DEPRECATED
 var branchLogic = require('./includes/branch.js');
 app.get('/branch-type', function(req,res){
 	branchLogic.branchGet(req, res);

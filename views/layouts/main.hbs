@@ -37,6 +37,7 @@
     // Hides/Displays the Hidden Checkboxes used for Merging
     $("#mergeBtn").click(function() {
         $(".hiddenColumn").toggle();
+        $("#mergeBtn").toggleClass("active");
     });
 
     // Shows Merge Button if Two Checkboes Selected

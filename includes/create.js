@@ -25,8 +25,6 @@ function createGet(req, res) {
 }
 
 function createPost(req,res) {
-    console.log("User tried to create file...");
-	console.log(req.body);
 
 	// Just for testing
 	var d = new Date();

@@ -4,8 +4,17 @@ var register = function(Handlebars) {
             if (val1 == val2) {
                 return options.fn(this);
             }
+            else {
+                return options.inverse(this);
+            }
             return null;
-        }
+        }/*,
+        notEquals: function(val1,val2,options) {
+            if (val1 != val2) {
+                return options.fn(this);
+            }
+            return null;
+        }*/
     };
 
     if (Handlebars && typeof Handlebars.registerHelper === "function") {

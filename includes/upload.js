@@ -25,8 +25,6 @@ function uploadGet(req, res) {
 
 function uploadPost(RandomID, client, fs, req, res) {
     // Upload file form
-
-    console.log("User attempted to upload file...");
 	
 	if (typeof req.file !== 'undefined') {
 		// Just for testing
@@ -56,13 +54,11 @@ function uploadPost(RandomID, client, fs, req, res) {
 				branchID: branchID
 			};
 
-			console.log(testObj);
-
 			// Getting file size
 			var stats = fs.statSync(req.file.path);
 			var fileSize = stats.size;
 
-			console.log("File Size: " + fileSize);
+			//console.log("File Size: " + fileSize);
 
 			if (fileSize <= 999999999) {
 
@@ -121,6 +117,7 @@ function uploadPost(RandomID, client, fs, req, res) {
 				});
 			}
 			
+			fs.unlinkSync(req.file.path);
 		});
 	}
 	else {

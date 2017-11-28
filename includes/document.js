@@ -15,11 +15,9 @@ function documentGet(client, req, res) {
 				
 				if (err) { console.log(err); return; }
 
-				console.log("Versions: " + versionResults.response.docs);
 				// Replace all instances of \n with <br/>
 				var formattedFileContent = results.response.docs[0].contents;
-				console.log("Contents: " + formattedFileContent);
-
+				
            		res.render('document',{
 					// replace w/ dynamic document name from querystring
 		

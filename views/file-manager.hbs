@@ -12,16 +12,15 @@
     <tbody>
         {{#if docs}}
         {{#each docs}}
-        {{#equals branchID 0}}
+        
         <tr>
-            <td><i class="fa fa-file-text" aria-hidden="true"></i></td>
+            <td>{{#equals branchID 0}}<span class="badge badge-primary">Original</span>{{else}}<span class="badge badge-success">Branch</span>{{/equals}} </td>
             <td><a href="document/{{ id }}">{{ title }}</a></td>
             <td class="last-modified">{{ date }}</td>
             <td><a href="/branch-type?id={{ id }}"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <a href="file/{{id}}"><i class="fa fa-download"
                     aria-hidden="true"></i></a></td>
             <td class="hiddenColumn"><input type="checkbox" id="merge" name="merge" value="{{ id }}"></td>
         </tr>
-        {{/equals}}
         {{/each}}
         {{else}}
             <tr>
