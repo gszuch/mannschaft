@@ -20,7 +20,7 @@ function fileManagerGet(client, req, res) {
             // Check to see if any docs or empty
             const resultDocs = "";
             if (typeof results.response.docs !== 'undefined') {
-               resultDocs = results.response.docs;
+                resultDocs = results.response.docs;
             }
 
             res.render('file-manager', {
@@ -47,7 +47,7 @@ function fileManagerGet(client, req, res) {
  * @param {object} res 
  */
 function fileManagerPost(client, req, res) {
-     if (typeof req.session.user !== 'undefined') {
+    if (typeof req.session.user !== 'undefined') {
 
         // Pull from solr
         const term = "*" + req.body.searchTerm + "*";
@@ -61,7 +61,7 @@ function fileManagerPost(client, req, res) {
             // Check to see if any docs or empty
             const resultDocs = "";
             if (typeof results.response.docs !== 'undefined') {
-               resultDocs = results.response.docs;
+                resultDocs = results.response.docs;
             }
 
             //console.log("Search Value: " + req.body.searchTerm);

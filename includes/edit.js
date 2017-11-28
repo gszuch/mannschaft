@@ -4,8 +4,8 @@
  * @param {object} res 
  */
 function editGet(req, res) {
-    if (typeof req.session.user !== 'undefined') {
-		res.render('edit',{
+	if (typeof req.session.user !== 'undefined') {
+		res.render('edit', {
 			title: 'Edit File',
 			containerName: 'upload-form',
 			hasHeader: true,
@@ -25,5 +25,5 @@ function editGet(req, res) {
 }
 
 module.exports = {
-    editGet: editGet
+	editGet: editGet
 }

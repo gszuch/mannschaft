@@ -5,26 +5,23 @@
  */
 function createGet(req, res) {
 
-    if (typeof req.session.user !== 'undefined') {
+	if (typeof req.session.user !== 'undefined') {
+		res.render('create-text-file', {
+			title: 'Create File',
+			containerName: 'create-form',
+			hasHeader: true,
+			hasHeaderUpload: false,
 
-        res.render('create-text-file', {
-            title: 'Create File',
-            containerName: 'create-form',
-            hasHeader: true,
-            hasHeaderUpload: false,
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/create',
+			breadcrumbsText: 'Create File',
 
-            hasHeaderBreadcrumbs: true,
-            breadcrumbsPath: '/create',
-            breadcrumbsText: 'Create File',
-
-            hasTitleRowBorder: true,
-            footerBorder: true,
-            hasLogout: true
-        });
-    }
-    else {
-        res.redirect('/');
-    }
+			hasTitleRowBorder: true,
+			footerBorder: true,
+			hasLogout: true
+		});
+	}
+	else res.redirect('/');
 }
 
 /**
@@ -32,7 +29,7 @@ function createGet(req, res) {
  * @param {object} req 
  * @param {object} res 
  */
-function createPost(req,res) {
+function createPost(req, res) {
 
 	// Just for testing
 	const d = new Date();
@@ -47,36 +44,35 @@ function createPost(req,res) {
 	const fileAuthor = req.body.author;
 	const fileDescription = req.body.description;
 	const fileStatus;
-	
+
 	// Assemble object to add to Solr
 	const testObj = {
 		id: id,
-		title : fileName,
-		actual : fileActual, 
+		title: fileName,
+		actual: fileActual,
 		author: fileAuthor,
-		description : fileDescription,
-		contents : fileContents,
+		description: fileDescription,
+		contents: fileContents,
 		date: testDate
 	};
 
 	console.log(testObj);
 
 	// Update Solr
-	client.update(testObj, function(err, result) {
+	client.update(testObj, function (err, result) {
 		if (err) {
 			console.log(err);
 			console.log("Document could not be added!");
 		}
-		else {
-			console.log("Document added to Solr!");
-		}
+		else console.log("Document added to Solr!");
+
 		console.log("Response: ", result.responseHeader);
 	});
-	
+
 	res.redirect('/file-manager');
 }
 
 module.exports = {
-    createGet: createGet,
-    createPost: createPost
+	createGet: createGet,
+	createPost: createPost
 }

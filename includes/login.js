@@ -4,22 +4,22 @@
  * @param {object} res 
  */
 function loginGet(req, res) {
-    
-    if (typeof req.session.user !== 'undefined') {
-        // Session exists, redirect to file manager
-        res.redirect('/file-manager');
-    }
-    else {
-        // Session does not exist, show login
-        let showError = false;
-        if(req.query.q==='showError')
-            showError = true;
 
-        res.render('login',{
-            containerName: 'login',
-            showError: showError
-        });
-    }
+	if (typeof req.session.user !== 'undefined') {
+		// Session exists, redirect to file manager
+		res.redirect('/file-manager');
+	}
+	else {
+		// Session does not exist, show login
+		let showError = false;
+		if (req.query.q === 'showError')
+			showError = true;
+
+		res.render('login', {
+			containerName: 'login',
+			showError: showError
+		});
+	}
 }
 
 /**
@@ -28,14 +28,14 @@ function loginGet(req, res) {
  * @param {object} res 
  */
 function loginPost(req, res) {
-    let showError = false;
+	let showError = false;
 	let errorDefinition = false;
 
 	// Set main user information
 	let username = "mannschaft";
 	let password = "eins";
 	let author = "John Doe";
-	
+
 	if (req.body.username == username && req.body.password == password) {
 
 		// Setup user object to store in session
@@ -80,6 +80,6 @@ function loginPost(req, res) {
 }
 
 module.exports = {
-    loginGet: loginGet,
-    loginPost: loginPost
+	loginGet: loginGet,
+	loginPost: loginPost
 }

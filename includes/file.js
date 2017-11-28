@@ -6,27 +6,27 @@
  */
 function fileGet(client, req, res) {
 
-    if (typeof req.session.user !== 'undefined') {
+	if (typeof req.session.user !== 'undefined') {
 
 		const query = "id:" + req.params.docID;
 		const searchTerm = client.query().q(query);
 
 		client.search(searchTerm, function (err, results) {
 			if (err) {
-					console.log(err);
-					return;
+				console.log(err);
+				return;
 			}
 
 			const fileName = results.response.docs[0].title;
-			const file =  results.response.docs[0].contents[0];
-			
+			const file = results.response.docs[0].contents[0];
+
 			fileName += ".txt";
 			res.setHeader('Content-type', "application/octet-stream");
 			res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
 			res.send(file);
 
 		});
-		
+
 	}
 	else {
 		res.redirect('/');
@@ -34,5 +34,5 @@ function fileGet(client, req, res) {
 }
 
 module.exports = {
-    fileGet: fileGet
+	fileGet: fileGet
 }

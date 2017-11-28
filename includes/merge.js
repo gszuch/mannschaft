@@ -5,13 +5,13 @@
  * @param {object} res 
  */
 function mergePost(client, req, res) {
-	
+
 	const mainContents = "";
 	const query = "";
 
 	// Assemble the solr search query 
 	for (const i = 0; i < req.body.merge.length; i++) {
-	
+
 		if (i == 0) {
 			query += "id:" + req.body.merge[i];
 		}
@@ -27,11 +27,11 @@ function mergePost(client, req, res) {
 
 	const searchTerm = client.query().q(query);
 
-    client.search(searchTerm, function (err, results) {
-        if (err) {
-            console.log(err);
-            return;
-        }
+	client.search(searchTerm, function (err, results) {
+		if (err) {
+			console.log(err);
+			return;
+		}
 		else {
 
 			for (const i = 0; i < results.response.docs.length; i++) {
@@ -58,17 +58,17 @@ function mergePost(client, req, res) {
 			const branchID = 0;
 
 			const testObj = {
-				id: id, 
-				title : fileName,
-				actual : fileActual, 
+				id: id,
+				title: fileName,
+				actual: fileActual,
 				author: fileAuthor,
-				description : fileDescription,
-				contents : fileContents,
+				description: fileDescription,
+				contents: fileContents,
 				date: testDate,
 				branchID: branchID
 			};
-			
-			client.update(testObj, function(err, result) {
+
+			client.update(testObj, function (err, result) {
 				if (err) {
 					console.log(err);
 					console.log("Document could not be added!");
@@ -77,7 +77,7 @@ function mergePost(client, req, res) {
 					console.log("Document added to Solr!");
 				}
 				console.log("Response: ", result.responseHeader);
-					
+
 				res.redirect('/file-manager');
 			});
 		}
@@ -86,5 +86,5 @@ function mergePost(client, req, res) {
 }
 
 module.exports = {
-    mergePost: mergePost
+	mergePost: mergePost
 }

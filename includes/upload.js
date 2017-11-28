@@ -4,26 +4,26 @@
  * @param {object} res 
  */
 function uploadGet(req, res) {
-    if (typeof req.session.user !== 'undefined') {
+	if (typeof req.session.user !== 'undefined') {
 
-        res.render('upload', {
-            title: 'Upload File',
-            containerName: 'upload-form',
-            hasHeader: true,
-            hasHeaderUpload: false,
+		res.render('upload', {
+			title: 'Upload File',
+			containerName: 'upload-form',
+			hasHeader: true,
+			hasHeaderUpload: false,
 
-            hasHeaderBreadcrumbs: true,
-            breadcrumbsPath: '/file-manager',
-            breadcrumbsText: 'File Manager',
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/file-manager',
+			breadcrumbsText: 'File Manager',
 
-            hasTitleRowBorder: true,
-            footerBorder: true,
-            hasLogout: true
-        });
-    }
-    else {
-        res.redirect('/');
-    }
+			hasTitleRowBorder: true,
+			footerBorder: true,
+			hasLogout: true
+		});
+	}
+	else {
+		res.redirect('/');
+	}
 }
 
 /**
@@ -34,16 +34,16 @@ function uploadGet(req, res) {
  * @param {object} res 
  */
 function uploadPost(client, fs, req, res) {
-    // Upload file form
-	
+	// Upload file form
+
 	if (typeof req.file !== 'undefined') {
-		
+
 		const d = new Date();
 		const month = d.getMonth() + 1;
 		const testDate = month + "/" + d.getDate() + "/" + d.getFullYear();
 		const id = Date.now();
 
-		fs.readFile(req.file.path, 'utf8', function(err, contents) {
+		fs.readFile(req.file.path, 'utf8', function (err, contents) {
 			const fileContents = contents;
 			const fileActual = req.file.originalname;
 			const fileName = req.body.name;
@@ -51,15 +51,15 @@ function uploadPost(client, fs, req, res) {
 			const fileDescription = req.body.description;
 			const branchID = 0;
 			const fileStatus;
-			
+
 			// Assemble object to add to Solr
 			const testObj = {
-				id: id, 
-				title : fileName,
-				actual : fileActual, 
+				id: id,
+				title: fileName,
+				actual: fileActual,
 				author: fileAuthor,
-				description : fileDescription,
-				contents : fileContents,
+				description: fileDescription,
+				contents: fileContents,
 				date: testDate,
 				branchID: branchID
 			};
@@ -77,11 +77,11 @@ function uploadPost(client, fs, req, res) {
 						containerName: 'upload-form',
 						hasHeader: true,
 						hasHeaderUpload: false,
-			
+
 						hasHeaderBreadcrumbs: true,
 						breadcrumbsPath: '/file-manager',
 						breadcrumbsText: 'File Manager',
-			
+
 						showError: true,
 						errorDefinition: "Form error, please try again.",
 						hasTitleRowBorder: true,
@@ -91,7 +91,7 @@ function uploadPost(client, fs, req, res) {
 				}
 				else {
 					// Uploads file to solr
-					client.update(testObj, function(err, result) {
+					client.update(testObj, function (err, result) {
 						if (err) {
 							console.log(err);
 							console.log("Document could not be added!");
@@ -100,23 +100,23 @@ function uploadPost(client, fs, req, res) {
 							console.log("Document added to Solr!");
 						}
 						console.log("Response: ", result.responseHeader);
-							
+
 						res.redirect('/file-manager');
 					});
 				}
-			} 
+			}
 			else {
-				
+
 				res.render('upload', {
 					title: 'Upload File',
 					containerName: 'upload-form',
 					hasHeader: true,
 					hasHeaderUpload: false,
-		
+
 					hasHeaderBreadcrumbs: true,
 					breadcrumbsPath: '/file-manager',
 					breadcrumbsText: 'File Manager',
-		
+
 					showError: true,
 					errorDefinition: "File too large.",
 					hasTitleRowBorder: true,
@@ -124,30 +124,30 @@ function uploadPost(client, fs, req, res) {
 					hasLogout: true
 				});
 			}
-			
+
 			fs.unlinkSync(req.file.path);
 		});
 	}
 	else {
 		console.log("User tried to not upload file");
 		res.render('upload', {
-            title: 'Upload File',
-            containerName: 'upload-form',
-            hasHeader: true,
-            hasHeaderUpload: false,
+			title: 'Upload File',
+			containerName: 'upload-form',
+			hasHeader: true,
+			hasHeaderUpload: false,
 
-            hasHeaderBreadcrumbs: true,
-            breadcrumbsPath: '/file-manager',
-            breadcrumbsText: 'File Manager',
+			hasHeaderBreadcrumbs: true,
+			breadcrumbsPath: '/file-manager',
+			breadcrumbsText: 'File Manager',
 
 			showError: true,
-            hasTitleRowBorder: true,
-            footerBorder: true,
-            hasLogout: true
-        });
+			hasTitleRowBorder: true,
+			footerBorder: true,
+			hasLogout: true
+		});
 	}
 }
 module.exports = {
-    uploadGet: uploadGet,
-    uploadPost: uploadPost
+	uploadGet: uploadGet,
+	uploadPost: uploadPost
 }
