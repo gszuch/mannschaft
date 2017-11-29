@@ -4,7 +4,9 @@
   "description": "UWF CIS4595C Capstone Systems Project",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "./solr-7.1.0/bin/solr start",
+    "start": "node app.js"
   },
   "author": "Halfacre, J., Loftis, J., Miller, A., Szuch, G., & Taylor, P.",
   "license": "ISC",
