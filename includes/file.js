@@ -17,8 +17,8 @@ function fileGet(client, req, res) {
 				return;
 			}
 
-			var fileName = results.response.docs[0].title;
-			var file = results.response.docs[0].contents[0];
+			let fileName = results.response.docs[0].title;
+			let file = results.response.docs[0].contents[0];
 
 			fileName += ".txt";
 			res.setHeader('Content-type', "application/octet-stream");
