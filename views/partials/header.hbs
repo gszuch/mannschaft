@@ -1,16 +1,18 @@
 <div class="container">
     <div class="row header-row">
         <div class="col-md-3 logo">
-            <h2>Mannschaft</h2>
+            <a href="/file-manager" class="headerLink"><h2>Mannschaft</h2></a>
         </div>
         <div class="col-md-5"></div>
         <div class="col-md-4 search">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
-                <span class="input-group-btn">
-			        <button class="btn btn-secondary" type="button">Go!</button>
-			      </span>
-            </div>
+            <form action="/file-manager" method="post">
+                <div class="input-group">
+                    <input type="text" id="searchTerm" value="{{ searchValue }}" name="searchTerm" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                    <span class="input-group-btn">
+                        <input type="submit" class="btn btn-secondary" value="Go">
+                    </span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -18,7 +20,7 @@
 
 <div class="container">
     <div class="row title-row">
-        <div class="col-md-8">
+        <div class="col-md-{{#if hasHeaderMerge}}6{{else}}8{{/if}}">
 {{#if hasHeaderBreadcrumbs}}
             {{> headerBreadcrumbs}}
 {{/if}}
@@ -35,6 +37,9 @@
             </small>
 {{/if}}
         </div>
+{{#if hasHeaderMerge}}
+    {{> headerMerge}}
+{{/if}}
 {{#if hasHeaderUpload}} 
         {{> headerUpload}} 
 {{/if}}

@@ -1,3 +1,4 @@
+<form action="/merge" method="post">
 <table class="table table-hover">
     <thead>
         <tr>
@@ -5,18 +6,41 @@
             <th>Title</th>
             <th class="last-modified">Last Modified</th>
             <th>Branch/Download</th>
+            <th class="hiddenColumn">Merge?</th>
         </tr>
     </thead>
     <tbody>
+        {{#if docs}}
         {{#each docs}}
+        
         <tr>
-            <td><i class="fa fa-file-text" aria-hidden="true"></i></td>
-            <td><a href="document">{{ name }}</a></td>
+            <td>{{#equals branchID 0}}<span class="badge badge-primary">Original</span>{{else}}<span class="badge badge-success">Branch</span>{{/equals}} </td>
+            <td><a href="document/{{ id }}">{{ title }}</a></td>
             <td class="last-modified">{{ date }}</td>
-            <td><a href="branch-type"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <i class="fa fa-download"
-                    aria-hidden="true"></i></td>
+            <td><a href="/branch-type?id={{ id }}"><i class="fa fa-code-fork" aria-hidden="true"></i></a> / <a href="file/{{id}}"><i class="fa fa-download"
+                    aria-hidden="true"></i></a></td>
+            <td class="hiddenColumn"><input type="checkbox" id="merge" name="merge" value="{{ id }}"></td>
         </tr>
-
         {{/each}}
+        {{else}}
+            <tr>
+                <td colspan="4">Please "Upload Files" to Begin...</td>
+            </tr>
+        {{/if}}
     </tbody>
 </table>
+
+
+<div class="row justify-content-center" id="finalMerge" style="display:none">
+    
+        <div class="form-group row">
+            <div class="col-md-7">
+                <input type="text" name="newTitle" class="form-control" placeholder="New branch name...">
+            </div>
+            <div class="col-md-5"><input type="submit" class="btn btn-block btn-primary merge-btn" value="Merge Files"></div>
+        </div>
+        
+    
+</div>
+
+</form>

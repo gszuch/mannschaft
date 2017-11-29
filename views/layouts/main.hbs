@@ -32,5 +32,24 @@
         Copyright &copy; 2017 Mannschaft{{#if hasLogout }} - <a href="/logout">Logout</a>{{/if}}
     </p>
 </body>
+<script>
+    
+    // Hides/Displays the Hidden Checkboxes used for Merging
+    $("#mergeBtn").click(function() {
+        $(".hiddenColumn").toggle();
+        $("#mergeBtn").toggleClass("active");
+    });
 
+    // Shows Merge Button if Two Checkboes Selected
+    $("input[name='merge']").change(function() {
+        var cLength = $("input[name='merge']:checked").length;
+        if (cLength >= 2) {
+            $("#finalMerge").show();
+        }
+        else {
+            $("#finalMerge").hide();
+        } 
+    });
+
+</script>
 </html>
