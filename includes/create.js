@@ -43,7 +43,6 @@ function createPost(req, res) {
 	const fileName = req.body.name;
 	const fileAuthor = req.body.author;
 	const fileDescription = req.body.description;
-	const fileStatus;
 
 	// Assemble object to add to Solr
 	const testObj = {

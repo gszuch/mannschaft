@@ -68,7 +68,7 @@ function uploadBranchPost(client, fs, req, res) {
 
 		// Document ID of parent doc
 		const branchID = req.body.docID;
-		const fileStatus;
+		//const fileStatus;
 
 		// Assemble object to add to Solr
 		const testObj = {

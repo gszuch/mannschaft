@@ -9,8 +9,8 @@ function fileManagerGet(client, req, res) {
     if (typeof req.session.user !== 'undefined') {
 
         // Pull from solr
-        const diffTerm = "q=*:*&sort=id desc";
-        const searchTerm = client.query().q('*:*');
+        var diffTerm = "q=*:*&sort=id desc";
+        var searchTerm = client.query().q('*:*');
         client.search(diffTerm, function (err, results) {
             if (err) {
                 console.log(err);
@@ -18,7 +18,7 @@ function fileManagerGet(client, req, res) {
             }
 
             // Check to see if any docs or empty
-            const resultDocs = "";
+            var resultDocs = "";
             if (typeof results.response.docs !== 'undefined') {
                 resultDocs = results.response.docs;
             }
@@ -42,16 +42,31 @@ function fileManagerGet(client, req, res) {
 
 /**
  * 
- * @param {object} client 
+ * @param {object} client - Connection to the solr-node client instance
  * @param {object} req 
  * @param {object} res 
  */
 function fileManagerPost(client, req, res) {
     if (typeof req.session.user !== 'undefined') {
 
-        // Pull from solr
-        const term = "*" + req.body.searchTerm + "*";
-        const searchTerm = client.query().q(term);
+        // Separates search string words and adds "AND" between them to narrow results
+        var searchString = req.body.searchTerm.split(" ");
+        var term = "*";
+
+        for (var i = 0; i < searchString.length; i++) {
+
+            if (i == 0) {
+                term += searchString[i];
+            }
+            else {
+                term += " AND " + searchString[i];
+            }
+
+        }
+        term += "*";
+
+        // Search Solr
+        var searchTerm = client.query().q(term);
         client.search(searchTerm, function (err, results) {
             if (err) {
                 console.log(err);
@@ -59,7 +74,7 @@ function fileManagerPost(client, req, res) {
             }
 
             // Check to see if any docs or empty
-            const resultDocs = "";
+            var resultDocs = "";
             if (typeof results.response.docs !== 'undefined') {
                 resultDocs = results.response.docs;
             }

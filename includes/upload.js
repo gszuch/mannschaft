@@ -50,7 +50,7 @@ function uploadPost(client, fs, req, res) {
 			const fileAuthor = req.body.author;
 			const fileDescription = req.body.description;
 			const branchID = 0;
-			const fileStatus;
+			//const fileStatus;
 
 			// Assemble object to add to Solr
 			const testObj = {

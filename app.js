@@ -66,7 +66,9 @@ app.use(Session({
 app.get('/branch-type', function (req, res) { branchLogic.branchGet(req, res); });
 app.get('/create', function (req, res) { createLogic.createGet(req, res); });
 app.get('/edit', function (req, res) { editLogic.editGet(req, res); });
-app.get('/file-manager', function (req, res) { fileManager.fileManagerGet(client, req, res); });
+app.get('/file-manager', function (req, res) { 
+	fileManager.fileManagerGet(client, req, res); 
+});
 app.get('/file/:docID', function (req, res) { fileLogic.fileGet(client, req, res); });
 app.get('/logout', function (req, res) { req.session.reset(); res.redirect('/'); });
 app.get('/upload-branch', function (req, res) { uploadBranchLogic.uploadBranchGet(client, req, res); });
